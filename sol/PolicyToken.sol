@@ -7,6 +7,18 @@ contract PolicyToken is ERC721 {
     uint256 public totalSupply = 0;
     uint256 public tokenCount = 0;
 
+    struct Authority {
+        bool admin;
+        bool holder;
+        bool worker;
+        string publicKey;
+    }
+
+    event HasAdminAuthority(address _owner);
+    event HasHolderAuthority(address _owner);
+    event HasWorkerAuthority(address _owner);
+    event CreateToken(uint256 tokenId);
+
     using SafeMath for uint256;
 
     mapping (uint256 => Authority) public allToken;
@@ -58,6 +70,31 @@ contract PolicyToken is ERC721 {
         _transfer(msg.sender, _to, _tokenId);
     }
 
+    /// @notice Grant another address the right to transfer a specific policy via
+    ///  transferFrom(). This is the preferred flow for transfering NFTs to contracts.
+    /// @param _to The address to be granted transfer approval. Pass address(0) to
+    ///  clear all approvals.
+    /// @param _tokenId The ID of the policy that can be transferred if this call succeeds.
+    /// @dev Required for ERC-721 compliance.
+    function approve(address _to, uint256 _tokenId) public {
+        // Only an owner can grant transfer approval.
+        require(_owns(msg.sender, _tokenId));
+
+        // Register the approval (replacing any previous approval).
+        _approve(_tokenId, _to);
+
+        // Emit approval event.
+        emit Approval(msg.sender, _to, _tokenId);
+    }
+
+    function takeOwnership(uint256 _tokenId) public {
+        require(_owns(msg.sender, _tokenId));
+
+        address owner = ownerOf(_tokenId);
+
+        _transfer(owner, msg.sender, _tokenId);
+    }
+
     /// @dev Checks if a given address currently has transferApproval for a particular policy.
     /// @param _claimant the address we are confirming policy is approved for.
     /// @param _tokenId policy id, only valid when > 0
@@ -105,44 +142,6 @@ contract PolicyToken is ERC721 {
         indexToApproved[_tokenId] = _approved;
     }
 
-    /// @notice Grant another address the right to transfer a specific policy via
-    ///  transferFrom(). This is the preferred flow for transfering NFTs to contracts.
-    /// @param _to The address to be granted transfer approval. Pass address(0) to
-    ///  clear all approvals.
-    /// @param _tokenId The ID of the policy that can be transferred if this call succeeds.
-    /// @dev Required for ERC-721 compliance.
-    function approve(address _to, uint256 _tokenId) public {
-        // Only an owner can grant transfer approval.
-        require(_owns(msg.sender, _tokenId));
-
-        // Register the approval (replacing any previous approval).
-        _approve(_tokenId, _to);
-
-        // Emit approval event.
-        emit Approval(msg.sender, _to, _tokenId);
-    }
-
-    function takeOwnership(uint256 _tokenId) public {
-        require(_owns(msg.sender, _tokenId));
-
-        address owner = ownerOf(_tokenId);
-
-        _transfer(owner, msg.sender, _tokenId);
-    }
-
-    event CreateToken(uint256 tokenId);
-
-    struct Authority {
-        bool admin;
-        bool holder;
-        bool worker;
-        string publicKey;
-    }
-
-    event HasAdminAuthority(address _owner);
-    event HasHolderAuthority(address _owner);
-    event HasWorkerAuthority(address _owner);
-
     //make sure that msg.sender allow to own token.
     function hasAdminAuthority(address _owner) public returns (bool) {
         emit HasAdminAuthority(_owner);
@@ -164,8 +163,8 @@ contract PolicyToken is ERC721 {
         string _publicKey
     ) public returns (uint256) {
         require(ownershipTokenId[msg.sender] == 0);
-        require(tokenCount + 1 > tokenCount);
-        require(totalSupply + 1 > totalSupply);
+        require(tokenCount.add(1) > tokenCount);
+        require(totalSupply.add(1) > totalSupply);
         if (_adminAuthority) {
             require(hasAdminAuthority(msg.sender));
         }
