@@ -258,11 +258,12 @@ contract PolicyToken is ERC721 {
         return allToken[ownershipTokenID[_owner]].worker;
     }
 
-    function keyReflesh(string _seed, uint _tokenID) public returns (string) {
+    function keyReflesh(string _public_key, uint _tokenID) public returns (string) {
         require(indexToOwner[_tokenID] == msg.sender);
-        allToken[_tokenID].publicKey = _seed;
+        allToken[_tokenID].publicKey = _public_key;
         return _seed;
     }
+
     /// @notice Returns the total number of Kitties currently in existence.
     /// @dev Required for ERC-721 compliance.
     //function totalSupply() public view returns (uint) {
