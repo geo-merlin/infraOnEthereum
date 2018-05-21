@@ -1,10 +1,13 @@
 pragma solidity ^0.4.23;
 
 import "./ERC721.sol";
+import "./safemath.sol";
 
 contract PolicyToken is ERC721 {
     uint256 public totalSupply = 0;
     uint256 public tokenCount = 0;
+
+    using SafeMath for uint256;
 
     mapping (uint256 => Authority) public allToken;
 
@@ -158,7 +161,7 @@ contract PolicyToken is ERC721 {
         bool _adminAuthority,
         bool _holderAuthority,
         bool _workerAuthority,
-        string _seed
+        string _publicKey
     ) public returns (uint256) {
         require(ownershipTokenId[msg.sender] == 0);
         require(tokenCount + 1 > tokenCount);
@@ -173,15 +176,15 @@ contract PolicyToken is ERC721 {
             require(hasWorkerAuthority(msg.sender));
         }
 
-        tokenCount++;
-        totalSupply++;
+        tokenCount = tokenCount.add(1);
+        totalSupply = totalSupply.add(1);
         ownershipTokenId[msg.sender] = tokenCount;
         indexToOwner[tokenCount] = msg.sender;
         allToken[tokenCount] = Authority({
             admin: _adminAuthority,
             holder: _holderAuthority,
             worker: _workerAuthority,
-            publicKey: _seed
+            publicKey: _publicKey
         });
 
         emit CreateToken(tokenCount);
@@ -207,7 +210,7 @@ contract PolicyToken is ERC721 {
         require(totalSupply > 0);
         require(ownershipTokenId[msg.sender] > 0);
         delete allToken[tokenCount];
-        totalSupply--;
+        totalSupply = totalSupply.sub(1);
         delete ownershipTokenId[msg.sender];
         delete indexToOwner[_tokenId];
     }
@@ -226,10 +229,19 @@ contract PolicyToken is ERC721 {
         return allToken[ownershipTokenId[_owner]].worker;
     }
 
-    function keyReflesh(string _public_key, uint _tokenID) public returns (string) {
+    function checkAllAuthority(address _owner) public view returns (bool[3] memory) {
+        require(ownershipTokenId[_owner] > 0);
+        return [
+            allToken[ownershipTokenId[_owner]].admin,
+            allToken[ownershipTokenId[_owner]].holder,
+            allToken[ownershipTokenId[_owner]].worker
+        ];
+    }
+
+    function keyReflesh(string _publicKey, uint _tokenID) public returns (string) {
         require(indexToOwner[_tokenID] == msg.sender);
-        allToken[_tokenID].publicKey = _public_key;
-        return _publick_key;
+        allToken[_tokenID].publicKey = _publicKey;
+        return _publicKey;
     }
 
     /// @notice Returns the total number of Kitties currently in existence.
