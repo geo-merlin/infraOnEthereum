@@ -24,3 +24,35 @@ function startApp() {
 function KeyResister(key,token_id){
     contract.KeyReflesh(key,token_id);
 }
+
+function getMyToken(my_address){
+    var tokens = contract.checkAllToken(my_address);
+    tokens.forEach(function(d){
+        visibleToken(d);
+    })
+} 
+
+function requireInfo(my_address,token){
+    
+    var hash = hashURL(news_url);
+    var api_url = "https://";
+    var header = {
+        url: api_url,
+        contentType: "application/json",
+        dataType: "json",
+        cache: false,
+        type: "GET",
+        data: {
+            name: "MODAL",
+            req: hash
+        }
+    };
+    var f = function (res) {
+    };
+    var g = function (res) {
+        console.log(res);
+    };
+
+    $.ajax(header).done(f).fail(g).always(searchTweetsByKeyword);
+}
+
