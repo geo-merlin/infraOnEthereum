@@ -13,7 +13,7 @@ contract PolicyToken is ERC721 {
 
     // @dev A mapping from owner address to count of tokens that address owns.
     //  Used internally inside balanceOf() to resolve ownership count.
-    mapping (address => uint256) public ownershipTokenID;
+    mapping (address => uint256) public ownershipTokenId;
 
     /// @dev A mapping from policyIDs to an address that has been approved to call
     ///  transferFrom(). Each policy can only have one approved address for transfer
@@ -23,22 +23,22 @@ contract PolicyToken is ERC721 {
     /// @notice Returns the number of Kitties owned by a specific address.
     /// @param _owner The owner address to check.
     /// @dev Required for ERC-721 compliance
-    function balanceOf(address _owner) public view returns (uint256 count) {
-        uint256 count = 0;
-        if (ownershipTokenID[_owner] > 0) {
-            count = 1;
+    function balanceOf(address _owner) public view returns (uint256 _balance) {
+        _balance = 0;
+        if (ownershipTokenId[_owner] > 0) {
+            _balance = 1;
         }
     }
 
     /// @notice Returns the address currently assigned ownership of a given policy.
     /// @dev Required for ERC-721 compliance.
-    function ownerOf(uint256 _tokenId) external view returns (address owner) {
-        owner = indexToOwner[_tokenId];
+    function ownerOf(uint256 _tokenId) public view returns (address _owner) {
+        _owner = indexToOwner[_tokenId];
 
-        require(owner != address(0));
+        require(_owner != address(0));
     }
 
-    function transfer(address _to, uint256 _tokenId) external {
+    function transfer(address _to, uint256 _tokenId) public {
         // Safety check to prevent against an unexpected 0x0 default.
         require(_to != address(0));
         // Disallow transfers to this contract to prevent accidental misuse.
@@ -49,7 +49,7 @@ contract PolicyToken is ERC721 {
         // You can only send your own authority.
         require(_owns(msg.sender, _tokenId));
 
-        require(ownershipTokenID[_to] == 0);
+        require(ownershipTokenId[_to] == 0);
 
         // Reassign ownership, clear pending approvals, emit Transfer event.
         _transfer(msg.sender, _to, _tokenId);
@@ -87,7 +87,7 @@ contract PolicyToken is ERC721 {
         require(_approvedFor(msg.sender, _tokenId));
         require(_owns(_from, _tokenId));
 
-        require(ownershipTokenID[_to] == 0);
+        require(ownershipTokenId[_to] == 0);
 
         // Reassign ownership (also clears pending approvals and emits Transfer event).
         _transfer(_from, _to, _tokenId);
@@ -108,7 +108,7 @@ contract PolicyToken is ERC721 {
     ///  clear all approvals.
     /// @param _tokenId The ID of the policy that can be transferred if this call succeeds.
     /// @dev Required for ERC-721 compliance.
-    function approve(address _to, uint256 _tokenId) external {
+    function approve(address _to, uint256 _tokenId) public {
         // Only an owner can grant transfer approval.
         require(_owns(msg.sender, _tokenId));
 
@@ -120,14 +120,14 @@ contract PolicyToken is ERC721 {
     }
 
     function takeOwnership(uint256 _tokenId) public {
-        require(zombieApprovals[_tokenId] == msg.sender);
+        require(_owns(msg.sender, _tokenId));
 
         address owner = ownerOf(_tokenId);
 
         _transfer(owner, msg.sender, _tokenId);
     }
 
-    event CreateToken(uint256 tokenID);
+    event CreateToken(uint256 tokenId);
 
     struct Authority {
         bool admin;
@@ -160,7 +160,7 @@ contract PolicyToken is ERC721 {
         bool _workerAuthority,
         string _seed
     ) public returns (uint256) {
-        require(ownershipTokenID[msg.sender] == 0);
+        require(ownershipTokenId[msg.sender] == 0);
         require(tokenCount + 1 > tokenCount);
         require(totalSupply + 1 > totalSupply);
         if (_adminAuthority) {
@@ -175,7 +175,7 @@ contract PolicyToken is ERC721 {
 
         tokenCount++;
         totalSupply++;
-        ownershipTokenID[msg.sender] = tokenCount;
+        ownershipTokenId[msg.sender] = tokenCount;
         indexToOwner[tokenCount] = msg.sender;
         allToken[tokenCount] = Authority({
             admin: _adminAuthority,
@@ -190,12 +190,12 @@ contract PolicyToken is ERC721 {
 
     function _transfer(address _from, address _to, uint256 _tokenId) private {
         // Since the number of policys is capped to 2^32 we can't overflow this
-        ownershipTokenID[_to] = _tokenID;
+        ownershipTokenId[_to] = _tokenId;
         // transfer ownership
-        indexToOwner[_tokenID] = _to;
+        indexToOwner[_tokenId] = _to;
         // When creating new policys _from is 0x0, but we can't account that address.
       if (_from != address(0)) {
-          delete ownershipTokenID[_from];
+          delete ownershipTokenId[_from];
           // clear any previously approved ownership exchange
           //delete indexToApproved[_tokenId];
       }
@@ -203,33 +203,33 @@ contract PolicyToken is ERC721 {
       emit Transfer(_from, _to, _tokenId);
     }
 
-    function deleteToken(uint _tokenID) public {
+    function deleteToken(uint _tokenId) public {
         require(totalSupply > 0);
-        require(ownershipTokenID[msg.sender] > 0);
+        require(ownershipTokenId[msg.sender] > 0);
         delete allToken[tokenCount];
         totalSupply--;
-        delete ownershipTokenID[msg.sender];
-        delete indexToOwner[_tokenID];
+        delete ownershipTokenId[msg.sender];
+        delete indexToOwner[_tokenId];
     }
 
     // get token information.
     function checkAdminAuthority(address _owner) public view returns (bool) {
-        require(ownershipTokenID[_owner] > 0);
-        return allToken[ownershipTokenID[_owner]].admin;
+        require(ownershipTokenId[_owner] > 0);
+        return allToken[ownershipTokenId[_owner]].admin;
     }
     function checkHolderAuthority(address _owner) public view returns (bool) {
-        require(ownershipTokenID[_owner] > 0);
-        return allToken[ownershipTokenID[_owner]].holder;
+        require(ownershipTokenId[_owner] > 0);
+        return allToken[ownershipTokenId[_owner]].holder;
     }
     function checkWorkerAuthority(address _owner) public view returns (bool) {
-        require(ownershipTokenID[_owner] > 0);
-        return allToken[ownershipTokenID[_owner]].worker;
+        require(ownershipTokenId[_owner] > 0);
+        return allToken[ownershipTokenId[_owner]].worker;
     }
 
     function keyReflesh(string _public_key, uint _tokenID) public returns (string) {
         require(indexToOwner[_tokenID] == msg.sender);
         allToken[_tokenID].publicKey = _public_key;
-        return _seed;
+        return _publick_key;
     }
 
     /// @notice Returns the total number of Kitties currently in existence.
