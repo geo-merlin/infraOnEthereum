@@ -1,3 +1,5 @@
+
+var contract;
 window.addEventListener('load', function() {
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -13,12 +15,12 @@ window.addEventListener('load', function() {
   // Now you can start your app & access web3js freely:
   startApp()
 })
-var cryptoZombies;
+
 function startApp() {
-    var cryptoZombiesAddress = "YOUR_CONTRACT_ADDRESS";
-    cryptoZombies = new web3js.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+    var Address = "YOUR_CONTRACT_ADDRESS";
+    contract = new web3js.eth.Contract(ABI, Address);
 }
 
-function KeyResister(key){
-
+function KeyResister(key,token_id){
+    contract.KeyReflesh(key,token_id);
 }
