@@ -1,25 +1,11 @@
 pragma solidity ^0.4.23;
 
-contract ERC721 {
-    // Required methods
-    //function totalSupply() public view returns (uint256 total);
-    function balanceOf(address _owner) public view returns (uint256 balance);
-    function ownerOf(uint256 _tokenId) external view returns (address owner);
-    function approve(address _to, uint256 _tokenId) external;
-    function transfer(address _to, uint256 _tokenId) external;
-    function transferFrom(address _from, address _to, uint256 _tokenId) external;
-
-    // Events
-    event Transfer(address from, address to, uint256 tokenId);
-    event Approval(address owner, address approved, uint256 tokenId);
-
-    // ERC-165 Compatibility (https://github.com/ethereum/EIPs/issues/165)
-    //function supportsInterface(bytes4 _interfaceID) external view returns (bool);
-}
+import "./ERC721.sol";
 
 contract PolicyToken is ERC721 {
     uint256 public totalSupply = 0;
     uint256 public tokenCount = 0;
+
     mapping (uint256 => Authority) public allToken;
 
     ///  some valid owner address, even gen0 authoritys are created with a non-zero owner.
@@ -32,48 +18,33 @@ contract PolicyToken is ERC721 {
     /// @dev A mapping from policyIDs to an address that has been approved to call
     ///  transferFrom(). Each policy can only have one approved address for transfer
     ///  at any time. A zero value means no approval is outstanding.
-    mapping (uint256 => address) public policyIndexToApproved;
+    mapping (uint256 => address) public indexToApproved;
 
     /// @notice Returns the number of Kitties owned by a specific address.
     /// @param _owner The owner address to check.
     /// @dev Required for ERC-721 compliance
-    function balanceOf(address _owner) public view returns (uint256) {
+    function balanceOf(address _owner) public view returns (uint256 count) {
         uint256 count = 0;
         if (ownershipTokenID[_owner] > 0) {
             count = 1;
         }
-        return count;
     }
 
     /// @notice Returns the address currently assigned ownership of a given policy.
     /// @dev Required for ERC-721 compliance.
-    function ownerOf(uint256 _tokenId)
-        external
-        view
-        returns (address owner)
-    {
+    function ownerOf(uint256 _tokenId) external view returns (address owner) {
         owner = indexToOwner[_tokenId];
 
         require(owner != address(0));
     }
 
-    function transfer(
-        address _to,
-        uint256 _tokenId
-    )
-        external
-    {
+    function transfer(address _to, uint256 _tokenId) external {
         // Safety check to prevent against an unexpected 0x0 default.
         require(_to != address(0));
         // Disallow transfers to this contract to prevent accidental misuse.
         // The contract should never own any kitties (except very briefly
         // after a gen0 authority is created and before it goes on auction).
         require(_to != address(this));
-        // Disallow transfers to the auction contracts to prevent accidental
-        // misuse. Auction contracts should only take ownership of kitties
-        // through the allow + transferFrom flow.
-        //require(_to != address(saleAuction));
-        //require(_to != address(siringAuction));
 
         // You can only send your own authority.
         require(_owns(msg.sender, _tokenId));
@@ -81,19 +52,19 @@ contract PolicyToken is ERC721 {
         require(ownershipTokenID[_to] == 0);
 
         // Reassign ownership, clear pending approvals, emit Transfer event.
-        transferToken(msg.sender, _to, _tokenId);
+        _transfer(msg.sender, _to, _tokenId);
     }
 
     /// @dev Checks if a given address currently has transferApproval for a particular policy.
-    /// @param _claimant the address we are confirming kitten is approved for.
-    /// @param _tokenId kitten id, only valid when > 0
+    /// @param _claimant the address we are confirming policy is approved for.
+    /// @param _tokenId policy id, only valid when > 0
     function _approvedFor(address _claimant, uint256 _tokenId) internal view returns (bool) {
-        return policyIndexToApproved[_tokenId] == _claimant;
+        return indexToApproved[_tokenId] == _claimant;
     }
 
     /// @dev Checks if a given address is the current owner of a particular policy.
     /// @param _claimant the address we are validating against.
-    /// @param _tokenId kitten id, only valid when > 0
+    /// @param _tokenId policy id, only valid when > 0
     function _owns(address _claimant, uint256 _tokenId) internal view returns (bool) {
         return indexToOwner[_tokenId] == _claimant;
     }
@@ -105,13 +76,7 @@ contract PolicyToken is ERC721 {
     ///  including the caller.
     /// @param _tokenId The ID of the policy to be transferred.
     /// @dev Required for ERC-721 compliance.
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    )
-        external
-    {
+    function transferFrom(address _from, address _to, uint256 _tokenId) external {
         // Safety check to prevent against an unexpected 0x0 default.
         require(_to != address(0));
         // Disallow transfers to this contract to prevent accidental misuse.
@@ -125,7 +90,7 @@ contract PolicyToken is ERC721 {
         require(ownershipTokenID[_to] == 0);
 
         // Reassign ownership (also clears pending approvals and emits Transfer event).
-        transferToken(_from, _to, _tokenId);
+        _transfer(_from, _to, _tokenId);
     }
 
     /// @dev Marks an address as being approved for transferFrom(), overwriting any previous
@@ -134,7 +99,7 @@ contract PolicyToken is ERC721 {
     ///  _approve() and transferFrom() are used together for putting Kitties on auction, and
     ///  there is no value in spamming the log with Approval events in that case.
     function _approve(uint256 _tokenId, address _approved) internal {
-        policyIndexToApproved[_tokenId] = _approved;
+        indexToApproved[_tokenId] = _approved;
     }
 
     /// @notice Grant another address the right to transfer a specific policy via
@@ -143,12 +108,7 @@ contract PolicyToken is ERC721 {
     ///  clear all approvals.
     /// @param _tokenId The ID of the policy that can be transferred if this call succeeds.
     /// @dev Required for ERC-721 compliance.
-    function approve(
-        address _to,
-        uint256 _tokenId
-    )
-        external
-    {
+    function approve(address _to, uint256 _tokenId) external {
         // Only an owner can grant transfer approval.
         require(_owns(msg.sender, _tokenId));
 
@@ -157,6 +117,14 @@ contract PolicyToken is ERC721 {
 
         // Emit approval event.
         emit Approval(msg.sender, _to, _tokenId);
+    }
+
+    function takeOwnership(uint256 _tokenId) public {
+        require(zombieApprovals[_tokenId] == msg.sender);
+
+        address owner = ownerOf(_tokenId);
+
+        _transfer(owner, msg.sender, _tokenId);
     }
 
     event CreateToken(uint256 tokenID);
@@ -220,19 +188,19 @@ contract PolicyToken is ERC721 {
         return tokenCount;
     }
 
-    function transferToken(address _from, address _to, uint256 _tokenID) internal {
-        // Since the number of kittens is capped to 2^32 we can't overflow this
+    function _transfer(address _from, address _to, uint256 _tokenId) private {
+        // Since the number of policys is capped to 2^32 we can't overflow this
         ownershipTokenID[_to] = _tokenID;
         // transfer ownership
         indexToOwner[_tokenID] = _to;
-        // When creating new kittens _from is 0x0, but we can't account that address.
-        if (_from != address(0)) {
-            delete ownershipTokenID[_from];
-            // clear any previously approved ownership exchange
-            //delete policyIndexToApproved[_tokenId];
-        }
-        // Emit the transfer event.
-        emit Transfer(_from, _to, _tokenID);
+        // When creating new policys _from is 0x0, but we can't account that address.
+      if (_from != address(0)) {
+          delete ownershipTokenID[_from];
+          // clear any previously approved ownership exchange
+          //delete indexToApproved[_tokenId];
+      }
+
+      emit Transfer(_from, _to, _tokenId);
     }
 
     function deleteToken(uint _tokenID) public {
