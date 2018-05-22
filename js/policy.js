@@ -1,25 +1,49 @@
-
 var contract;
-window.addEventListener('load', function() {
+var userAccount;
+var policytokenContract;
+var web3;
 
+window.addEventListener('load', function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
-    web3js = new Web3(web3.currentProvider);
+    web3 = new Web3(web3.currentProvider);
   } else {
-    // Handle the case where the user doesn't have web3. Probably 
-    // show them a message telling them to install Metamask in 
+    web3 = new Web3(new Web3.providers.HttpProvider("https://localhost:8545"));
+    // Handle the case where the user doesn't have web3. Probably
+    // show them a message telling them to install Metamask in
     // order to use our app.
   }
 
-  // Now you can start your app & access web3js freely:
-  startApp()
-})
+  // Now you can start your app & access web3 freely:
+  web3.eth.getAccounts(function(error, accounts) {
+    if (!error) {
+        userAccount = accounts[0];
+        startApp(accounts[0]);
+    } else {
+      console.error(error);
+    }
+  });
 
-function startApp() {
-    var Address = "YOUR_CONTRACT_ADDRESS";
-    contract = new web3js.eth.Contract(ABI, Address);
+});
+
+const createAccount = (adminAuthority, holderAuthority, workerAuthority) => {
+    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority).call({from: userAccount});
 }
+
+const checkAllAuthority = () => {
+    return contract.methods.checkAllAuthority().call({from: userAccount});
+};
+
+const startApp = (owner) => {
+    contract = new web3.eth.Contract(contractABI, contractAddress);
+};
+
+
+// function startApp() {
+//     var Address = "YOUR_CONTRACT_ADDRESS";
+//     contract = new web3.eth.Contract(ABI, Address);
+// }
 
 function KeyResister(key,token_id){
     contract.KeyReflesh(key,token_id);
@@ -30,10 +54,10 @@ function getMyToken(my_address){
     tokens.forEach(function(d){
         visibleToken(d);
     })
-} 
+}
 
 function requireInfo(my_address,token){
-    
+
     var hash = hashURL(news_url);
     var api_url = "https://";
     var header = {
@@ -55,4 +79,3 @@ function requireInfo(my_address,token){
 
     $.ajax(header).done(f).fail(g).always(searchTweetsByKeyword);
 }
-
