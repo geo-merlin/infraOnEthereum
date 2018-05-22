@@ -19,7 +19,7 @@ window.addEventListener('load', function() {
   web3.eth.getAccounts(function(error, accounts) {
     if (!error) {
         userAccount = accounts[0];
-        startApp(accounts[0]);
+        startApp();
     } else {
       console.error(error);
     }
@@ -35,7 +35,7 @@ const checkAllAuthority = () => {
     return contract.methods.checkAllAuthority().call({from: userAccount});
 };
 
-const startApp = (owner) => {
+const startApp = () => {
     contract = new web3.eth.Contract(contractABI, contractAddress);
 };
 

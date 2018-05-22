@@ -1,4 +1,4 @@
-const contractAddress = "0x8a1636cdb7231e2dcff54627fdbb251ad0af7168";
+const contractAddress = "0xc83d0d5f493a440b1892bb7aed4d3f54510b1a90";
 const contractABI = [
 	{
 		"anonymous": false,
@@ -360,7 +360,12 @@ const contractABI = [
 	},
 	{
 		"constant": true,
-		"inputs": [],
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
 		"name": "checkAllAuthority",
 		"outputs": [
 			{
