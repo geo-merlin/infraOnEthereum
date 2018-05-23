@@ -27,12 +27,12 @@ window.addEventListener('load', function() {
 
 });
 
-const createAccount = (adminAuthority, holderAuthority, workerAuthority) => {
-    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority).call({from: userAccount});
+const createAccount = (adminAuthority, holderAuthority, workerAuthority, pass) => {
+    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority, pass).call({from: userAccount});
 }
 
 const checkAllAuthority = () => {
-    return contract.methods.checkAllAuthority().call({from: userAccount});
+    return contract.methods.checkAllAuthority(userAccount).call({from: userAccount});
 };
 
 const startApp = () => {
@@ -79,3 +79,34 @@ function requireInfo(my_address,token){
 
     $.ajax(header).done(f).fail(g).always(searchTweetsByKeyword);
 }
+
+$(() => {
+    $("#createToken").on("click", () => {
+        const adminAuthority = false;
+        const holderAuthority = false;
+        const workerAuthority = false;
+        const pass = "pass0";
+        createAccount(adminAuthority, holderAuthority, workerAuthority, pass).then((result) => {
+            $("#outputs").html("パスワード" + result + "でトークンを作成しました。");
+        }, (error) => {
+            console.log(error);
+            $("#outputs").html("トークンの作成に失敗しました。");
+        });
+    }).html("作成");
+    $("#checkAllAuthority").on("click", () => {
+        const adminAuthority = false;
+        const holderAuthority = false;
+        const workerAuthority = false;
+        const pass = "pass0";
+        checkAllAuthority().then((result) => {
+            $("#outputs").html("あなたが持っている権限は次のとおりです。<ul>"
+            + "<li>国の管理権限：" + (result[0] ? "あり" : "なし") + "</li>"
+            + "<li>株の所有：" + (result[1] ? "あり" : "なし") + "</li>"
+            + "<li>会社権限" + (result[2] ? "あり" : "なし") + "</li>"
+            + "</ul>");
+        }, (error) => {
+            console.log(error);
+            $("#outputs").html("持っている権限の取得に失敗しました。");
+        });
+    }).html("確認");
+});

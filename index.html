@@ -1,11 +1,20 @@
-<html>
+<html lang="ja">
   <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/web3.min.js"></script>
     <!--script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script-->
     <script language="javascript" type="text/javascript" src="js/cryptico.js"></script>
     <script language="javascript" type="text/javascript" src="js/contractABI.js"></script>
   </head>
   <body>
-      <script language="javascript" type="text/javascript" src="js/policy.js"></script>
+    <script language="javascript" type="text/javascript" src="js/policy.js"></script>
+    <div id="commands">
+      <button type="button" id="createToken" class="btn btn-primary">作成</button>
+      <button type="button" id="checkAllAuthority" class="btn btn-primary">確認</button>
+    </div>
+    <div id="outputs"></div>
   </body>
 </html>
