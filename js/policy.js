@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
     // Use Mist/MetaMask's provider
     web3 = new Web3(web3.currentProvider);
   } else {
-    web3 = new Web3(new Web3.providers.HttpProvider("https://localhost:8545"));
+    web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
     // Handle the case where the user doesn't have web3. Probably
     // show them a message telling them to install Metamask in
     // order to use our app.
@@ -24,26 +24,54 @@ window.addEventListener('load', function() {
             const adminAuthority = false;
             const holderAuthority = false;
             const workerAuthority = false;
-            const pass = "pass0";
-            createAccount(adminAuthority, holderAuthority, workerAuthority, pass).then((result) => {
-                $("#outputs").html("パスワード" + result + "でトークンを作成しました。");
+            const publicKey = $("#public-key-input").val();
+            console.log(publicKey);
+            createAccount(adminAuthority, holderAuthority, workerAuthority, publicKey).then((result) => {
+                $("#outputs").html("公開鍵" + result + "でトークンを作成しました。");
             }, (error) => {
                 console.log(error);
                 $("#outputs").html("トークンの作成に失敗しました。");
             });
-        }).html("作成");
+        });
+
         $("#checkAllAuthority").on("click", () => {
-            checkAllAuthority().then((result) => {
-                $("#outputs").html("あなたが持っている権限は次のとおりです。<ul>"
-                + "<li>国の管理権限：" + (result[0] ? "あり" : "なし") + "</li>"
-                + "<li>株の所有：" + (result[1] ? "あり" : "なし") + "</li>"
-                + "<li>会社権限：" + (result[2] ? "あり" : "なし") + "</li>"
+            $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
+            checkAllAuthority(userAccount).then((all_authority) => {
+                console.log(all_authority);
+                $("#allAuthority").html("あなたが持っている権限は次のとおりです。<ul>"
+                + "<li>国の管理権限：" + (all_authority[0] ? "あり" : "なし") + "</li>"
+                + "<li>株の所有：" + (all_authority[1] ? "あり" : "なし") + "</li>"
+                + "<li>会社権限：" + (all_authority[2] ? "あり" : "なし") + "</li>"
                 + "</ul>");
             }, (error) => {
                 console.log(error);
-                $("#outputs").html("持っている権限の取得に失敗しました。");
+                $("#allAuthority").html("権限の取得に失敗しました");
             });
-        }).html("確認");
+            checkPublicKey(userAccount).then((public_key) => {
+                console.log(public_key);
+                $("#publicKey").html("公開鍵は" + public_key + "です。");
+            }, (error) => {
+                console.log(error);
+                $("#publicKey").html("公開鍵の取得に失敗しました");
+            });
+        });
+
+        $("#changePublicKey").on("click", () => {
+            const publicKey = $("#public-key-input").val();
+            console.log(publicKey);
+            ownershipTokenId(userAccount).then((tokenId) => {
+                console.log(tokenId);
+                keyReflesh(publicKey, tokenId).then((result) => {
+                    $("#outputs").html("公開鍵を" + result + "に変更しました。");
+                }, (error) => {
+                    console.log(error);
+                    $("#outputs").html("公開鍵の変更に失敗しました。");
+                });
+            }, (error) => {
+                console.log(error);
+                $("#outputs").html("トークンの取得に失敗しました。");
+            });
+        });
 
         startApp();
     } else {
@@ -54,12 +82,24 @@ window.addEventListener('load', function() {
 
 });
 
-const createAccount = (adminAuthority, holderAuthority, workerAuthority, pass) => {
-    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority, pass).call({from: userAccount});
+const ownershipTokenId = () => {
+    return contract.methods.ownershipTokenId(userAccount).call();
+};
+
+const createAccount = (adminAuthority, holderAuthority, workerAuthority, publicKey) => {
+    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority, publicKey).call({from: userAccount});
 }
 
 const checkAllAuthority = () => {
-    return contract.methods.checkAllAuthority(userAccount).call({from: userAccount});
+    return contract.methods.checkAllAuthority(userAccount).call();
+};
+
+const checkPublicKey = () => {
+    return contract.methods.checkPublicKey(userAccount).call();
+};
+
+const keyReflesh = (new_public_key, token_id) => {
+    return contract.methods.keyReflesh(new_public_key, token_id).call();
 };
 
 const startApp = () => {

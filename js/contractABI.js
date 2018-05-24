@@ -1,4 +1,4 @@
-const contractAddress = "0xc83d0d5f493a440b1892bb7aed4d3f54510b1a90";
+const contractAddress = "0x76edec8f325da029dbf41cbe7093a40aa4563d6d";
 const contractABI = [
 	{
 		"anonymous": false,
@@ -127,7 +127,7 @@ const contractABI = [
 			},
 			{
 				"name": "_publicKey",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
 		"name": "createToken",
@@ -217,7 +217,7 @@ const contractABI = [
 		"inputs": [
 			{
 				"name": "_publicKey",
-				"type": "string"
+				"type": "uint256"
 			},
 			{
 				"name": "_tokenID",
@@ -228,7 +228,7 @@ const contractABI = [
 		"outputs": [
 			{
 				"name": "",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -313,7 +313,7 @@ const contractABI = [
 			},
 			{
 				"name": "publicKey",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -390,6 +390,25 @@ const contractABI = [
 			{
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "checkPublicKey",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
