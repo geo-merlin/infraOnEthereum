@@ -1,5 +1,27 @@
-const contractAddress = "0x06435f1f0cc6e45d6e65637eb11e2d30135485de";
+const contractAddress = "0x3a5b709f627913a962b6d64a231306d49e47b727";
 const contractABI = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_approved",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
 	{
 		"constant": false,
 		"inputs": [
@@ -19,48 +41,94 @@ const contractABI = [
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "_publicKey",
-				"type": "string"
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
 			}
 		],
-		"name": "keyReflesh",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "Transfer",
+		"type": "event"
 	},
 	{
-		"constant": true,
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "CreateToken",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
 				"name": "_owner",
 				"type": "address"
 			}
 		],
-		"name": "ownership",
-		"outputs": [
+		"name": "HasWorkerAuthority",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
-				"name": "tokenId",
-				"type": "uint256"
+				"indexed": false,
+				"name": "_owner",
+				"type": "address"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"name": "HasHolderAuthority",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "HasAdminAuthority",
+		"type": "event"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_to",
-				"type": "address"
+				"name": "_publicKeyN",
+				"type": "string"
+			},
+			{
+				"name": "_publicKeyE",
+				"type": "string"
 			}
 		],
-		"name": "transferMyToken",
-		"outputs": [],
+		"name": "createToken",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -78,38 +146,64 @@ const contractABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_publicKey",
+				"name": "_publicKeyN",
+				"type": "string"
+			},
+			{
+				"name": "_publicKeyE",
 				"type": "string"
 			}
 		],
-		"name": "createToken",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"name": "keyReflesh",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
 				"name": "_tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "ownerOf",
-		"outputs": [
+		"name": "takeOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
-				"name": "owner",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_to",
 				"type": "address"
 			}
 		],
+		"name": "transferMyToken",
+		"outputs": [],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -154,44 +248,16 @@ const contractABI = [
 				"type": "bool"
 			},
 			{
-				"name": "publicKey",
+				"name": "publicKeyN",
+				"type": "string"
+			},
+			{
+				"name": "publicKeyE",
 				"type": "string"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "takeOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -209,95 +275,41 @@ const contractABI = [
 		"type": "function"
 	},
 	{
-		"anonymous": false,
+		"constant": true,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "HasAdminAuthority",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "HasHolderAuthority",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "HasWorkerAuthority",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
 				"name": "_tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "CreateToken",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
+		"name": "ownerOf",
+		"outputs": [
 			{
-				"indexed": true,
-				"name": "_from",
+				"name": "owner",
 				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "_tokenId",
-				"type": "uint256"
 			}
 		],
-		"name": "Transfer",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
+		"constant": true,
 		"inputs": [
 			{
-				"indexed": true,
 				"name": "_owner",
 				"type": "address"
-			},
+			}
+		],
+		"name": "ownership",
+		"outputs": [
 			{
-				"indexed": true,
-				"name": "_approved",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "_tokenId",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "Approval",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ];

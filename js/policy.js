@@ -1,5 +1,5 @@
 var contract;
-var userAccount;
+var user_account;
 var policytokenContract;
 var web3;
 
@@ -18,61 +18,106 @@ window.addEventListener('load', () => {
   // Now you can start your app & access web3 freely:
   web3.eth.getAccounts((error, accounts) => {
     if (!error) {
-        userAccount = accounts[0];
+        user_account = accounts[0];
+        contract = new web3.eth.Contract(contractABI, contractAddress);
 
         $("#createToken").on("click", () => {
-            const adminAuthority = false;
-            const holderAuthority = false;
-            const workerAuthority = false;
-            const publicKey = $("#public-key-input").val();
-            console.log(publicKey);
-            createAccount(adminAuthority, holderAuthority, workerAuthority, publicKey).then((result) => {
-                console.log(result);
-                $("#outputs").html("公開鍵" + publicKey + "でトークンを作成しました。");
-            }, (error) => {
-                console.log(error);
-                $("#outputs").html("トークンの作成に失敗しました。");
-            });
+            const public_key_n = $("#public-key-n-input").val();
+            const public_key_e = $("#public-key-e-input").val();
+            console.log(public_key_n, public_key_e);
+            if (public_key_n.length > 0 && public_key_e.length > 0) {
+                balanceOf(user_account).then((balance) => {
+                    console.log(balance);
+                    if (Number(balance) === 0) {
+                        $("#outputs").html("トークンが作成されるのを待機しています。");
+                        createAccount(public_key_n, public_key_e).on("receipt", (result) => {
+                            console.log(result);
+                            $("#outputs").html("公開鍵 " + public_key + " でトークンを作成しました。");
+                        }).on("error", (error) => {
+                            console.error(error);
+                            $("#outputs").html("トークンの作成に失敗しました。");
+                        });
+                    } else if (Number(balance) > 0) {
+                        $("#outputs").html("あなたはすでにトークンを持っています。");
+                    } else {
+                        $("#outputs").html("残高が不明な値です。");
+                    }
+                }, (error) => {
+                    console.error(error);
+                    $("#outputs").html("残高の取得に失敗しました。");
+                });
+            } else {
+                $("#outputs").html("公開鍵を入力してください。");
+            }
         });
 
         $("#checkAuthority").on("click", () => {
             $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
-            checkAuthority(userAccount).then((all_authority) => {
-                console.log(all_authority);
+            checkAuthority(user_account).then((authority) => {
+                console.log(authority);
                 $("#allAuthority").html("<p>あなたが持っている権限は次のとおりです。<ul>"
-                + "<li>国の管理権限：" + (all_authority.isAdmin ? "あり" : "なし") + "</li>"
-                + "<li>株の所有：" + (all_authority.isHolder ? "あり" : "なし") + "</li>"
-                + "<li>会社権限：" + (all_authority.isWorker ? "あり" : "なし") + "</li>"
-                + "</ul></p><p>公開鍵は" + all_authority.publicKey + "です。</p>");
+                + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
+                + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
+                + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
+                + "</ul></p><p>公開鍵は次のとおりです。<ul>"
+                + "<li>N: " + authority.publicKeyN + "</li>"
+                + "<li>E: " + authority.publicKeyE + "</li>"
+                + "</ul></p>");
             }, (error) => {
-                console.log(error);
+                console.error(error);
                 $("#allAuthority").html("トークンの取得に失敗しました");
             });
         });
 
-        $("#changePublicKey").on("click", () => {
-            const publicKey = $("#public-key-input").val();
-            console.log(publicKey);
-            ownershipTokenId(userAccount).then((tokenId) => {
-                console.log(tokenId);
-                if (tokenId > 0) {
-                    keyReflesh(publicKey, tokenId).then((result) => {
+        $("#transfer").on("click", () => {
+            const to_address = $("#to-address-input").val();
+            console.log(to_address);
+            if (to_address) {
+                ownership(user_account).then((token_id) => {
+                    console.log(token_id);
+                    $("#outputs").html("トークンが送金されるのを待機しています。");
+                    transfer(to_address, token_id).on("receipt", (result) => {
                         console.log(result);
-                        $("#outputs").html("公開鍵を" + publicKey + "に変更しました。");
-                    }, (error) => {
-                        console.log(error);
-                        $("#outputs").html("公開鍵の変更に失敗しました。");
+                        $("#outputs").html("トークンを " + to_address + " に送金しました。");
+                    }).on("error", (error) => {
+                        console.error(error);
+                        $("#outputs").html("トークンの送金に失敗しました。");
                     });
-                } else {
+                }, (error) => {
+                    console.error(error);
                     $("#outputs").html("あなたはトークンを持っていません。");
-                }
-            }, (error) => {
-                console.log(error);
-                $("#outputs").html("トークンの取得に失敗しました。");
-            });
+                });
+            } else {
+                $("#outputs").html("宛先を入力してください。");
+            }
         });
 
-        startApp();
+        $("#changePublicKey").on("click", () => {
+            const public_key_n = $("#new-public-key-n-input").val();
+            const public_key_e = $("#new-public-key-e-input").val();
+            console.log(public_key_n, public_key_e);
+            if (public_key_n.length > 0 && public_key_e.length > 0) {
+                ownership(user_account).then((token_id) => {
+                    console.log(token_id);
+                    $("#outputs").html("公開鍵が変更されるのを待機しています。");
+                    keyReflesh(public_key_n, public_key_e).on("receipt", (result) => {
+                        console.log(result);
+                        $("#outputs").html("<p>公開鍵を次のように変更しました。<ul>"
+                        + "<li>N: " + public_key_n + "</li>"
+                        + "<li>E: " + public_key_e + "</li>"
+                        + "</ul></p>");
+                    }).on("error", (error) => {
+                        console.error(error);
+                        $("#outputs").html("公開鍵の変更に失敗しました。");
+                    });
+                }, (error) => {
+                    console.error(error);
+                    $("#outputs").html("あなたはトークンを持っていません。");
+                });
+            } else {
+                $("#outputs").html("公開鍵を入力してください。");
+            }
+        });
     } else {
       console.error(error);
       $("#outputs").html("アカウントが指定されていません。");
@@ -81,8 +126,12 @@ window.addEventListener('load', () => {
 
 });
 
-const allToken = (owner) => {
-    return contract.methods.balanceOf(owner).call();
+const balanceOf = (owner) => {
+    return contract.methods.ownership(owner).call();
+};
+
+const ownership = (owner) => {
+    return contract.methods.ownership(owner).call();
 };
 
 const ownerOf = (token_id) => {
@@ -90,43 +139,31 @@ const ownerOf = (token_id) => {
 };
 
 const transfer = (to, token_id) => {
-    return contract.methods.transfer(to, token_id).call({from: userAccount});
+    return contract.methods.transfer(to, token_id).send({from: user_account});
 };
 
 const approve = (to, token_id) => {
-    return contract.methods.transfer(to, token_id).call({from: userAccount});
+    return contract.methods.transfer(to, token_id).send({from: user_account});
 };
 
 const takeOwnership = (token_id) => {
-    return contract.methods.takeOwnership(token_id).call({from: userAccount});
+    return contract.methods.takeOwnership(token_id).send({from: user_account});
 };
 
-const ownershipTokenId = (owner) => {
-    return contract.methods.ownershipTokenId(owner).call();
-};
-
-const createAccount = (adminAuthority, holderAuthority, workerAuthority, publicKey) => {
-    return contract.methods.createToken(adminAuthority, holderAuthority, workerAuthority, publicKey).call({from: userAccount});
+const createAccount = (public_key_n, public_key_e) => {
+    return contract.methods.createToken(public_key_n, public_key_e).send({from: user_account});
 }
 
-const deleteToken = (token_id) => {
-    return contract.methods.deleteToken(userAccount).call({from: userAccount});
+const deleteToken = () => {
+    return contract.methods.deleteToken().send({from: user_account});
 };
 
 const checkAuthority = (owner) => {
     return contract.methods.checkAuthority(owner).call();
 };
 
-const checkPublicKey = (owner) => {
-    return contract.methods.checkPublicKey(owner).call();
-};
-
-const keyReflesh = (new_public_key, token_id) => {
-    return contract.methods.keyReflesh(new_public_key, token_id).call();
-};
-
-const startApp = () => {
-    contract = new web3.eth.Contract(contractABI, contractAddress);
+const keyReflesh = (public_key_n, public_key_e) => {
+    return contract.methods.keyReflesh(public_key_n, public_key_e).send({from: user_account});
 };
 
 function getMyToken(my_address){
