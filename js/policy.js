@@ -1,25 +1,21 @@
-var contract;
-var user_account;
-var policytokenContract;
-var web3;
-
-window.addEventListener('load', () => {
+$(() => {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
-    web3 = new Web3(web3.currentProvider);
+    window.web3 = new Web3(web3.currentProvider);
   } else {
-    web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
+    window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
     // Handle the case where the user doesn't have web3. Probably
     // show them a message telling them to install Metamask in
     // order to use our app.
   }
 
+  window.contract = new web3.eth.Contract(contractABI, contractAddress);
+
   // Now you can start your app & access web3 freely:
   web3.eth.getAccounts((error, accounts) => {
     if (!error) {
-        user_account = accounts[0];
-        contract = new web3.eth.Contract(contractABI, contractAddress);
+        window.user_account = accounts[0];
 
         $("#createToken").on("click", () => {
             const public_key_n = $("#public-key-n-input").val();
@@ -171,7 +167,6 @@ window.addEventListener('load', () => {
       $("#outputs").html("アカウントが指定されていません。");
     }
   });
-
 });
 
 const getTotalSupply = () => {
@@ -218,33 +213,28 @@ const keyReflesh = (public_key_n, public_key_e) => {
     return contract.methods.keyReflesh(public_key_n, public_key_e).send({from: user_account});
 };
 
-function getMyToken(my_address){
-    var tokens = contract.checkAllToken(my_address);
-    tokens.forEach(function(d){
-        visibleToken(d);
-    })
-}
-
-function requireInfo(my_address,token){
-
-    var hash = hashURL(news_url);
-    var api_url = "https://";
-    var header = {
+const requireInfo = (owner, file_name) => {
+    const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
+        //+ "?owner=" + encodeURIComponent(owner) + "&name=" + encodeURIComponent(file_name);
+    const data = {
+        owner: owner,
+        name: file_name
+    };
+    const header = {
         url: api_url,
+        type: "GET",
         contentType: "application/json",
         dataType: "json",
-        cache: false,
-        type: "GET",
-        data: {
-            name: "MODAL",
-            req: hash
-        }
+        cache: false
+        //,data: data
     };
-    var f = function (res) {
+    const f = (result) => {
+        console.log(result);
     };
-    var g = function (res) {
-        console.log(res);
+    const g = (error) => {
+        console.error(error);
     };
 
-    $.ajax(header).done(f).fail(g).always(searchTweetsByKeyword);
+    //$.ajax(header).then(f, g);
+    $.get(api_url, data, f);
 }
