@@ -79,13 +79,12 @@ window.addEventListener('load', () => {
         });
 
         $("#checkAuthority").on("click", () => {
-            $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
             balanceOf(user_account).then((balance) => {
                 console.log(balance);
                 if (Number(balance) > 0) {
                     checkAuthority(user_account).then((authority) => {
                         console.log(authority);
-                        $("#allAuthority").html("<p>あなたが持っている権限は次のとおりです。<ul>"
+                        $("#outputs").html("<p>あなたが持っている権限は次のとおりです。<ul>"
                         + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
                         + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
                         + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
@@ -105,6 +104,16 @@ window.addEventListener('load', () => {
             }, (error) => {
                 console.error(error);
                 $("#outputs").html("残高の取得に失敗しました。");
+            });
+        });
+
+        $("#getTotalSupply").on("click", () => {
+            getTotalSupply().then((result) => {
+                console.log(result);
+                $("#outputs").html("ただいまのトークン総発行数は " + result + " 枚です。");
+            }, (error) => {
+                console.error(error);
+                $("#outputs").html("総発光量の取得に失敗しました");
             });
         });
 
@@ -164,6 +173,10 @@ window.addEventListener('load', () => {
   });
 
 });
+
+const getTotalSupply = () => {
+    return contract.methods.getTotalSupply().call();
+};
 
 const balanceOf = (owner) => {
     return contract.methods.balanceOf(owner).call();
