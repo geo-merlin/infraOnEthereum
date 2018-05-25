@@ -11,7 +11,8 @@ contract PolicyToken is ERC721 {
         bool admin;
         bool holder;
         bool worker;
-        string publicKey;
+        string publicKeyN;
+        string publicKeyE;
     }
 
     event HasAdminAuthority(address _owner);
@@ -149,9 +150,11 @@ contract PolicyToken is ERC721 {
     }
 
     function createToken(
-        string _publicKey
+        string _publicKeyN,
+        string _publicKeyE
     ) public returns (uint256) {
-        require(bytes(_publicKey).length > 0);
+        require(bytes(_publicKeyN).length > 0);
+        require(bytes(_publicKeyE).length > 0);
         require(balanceOf(msg.sender) == 0);
         bool adminAuthority = hasAdminAuthority(msg.sender);
         bool holderAuthority = hasHolderAuthority(msg.sender);
@@ -165,7 +168,8 @@ contract PolicyToken is ERC721 {
             admin: adminAuthority,
             holder: holderAuthority,
             worker: workerAuthority,
-            publicKey: _publicKey
+            publicKeyN: _publicKeyN,
+            publicKeyE: _publicKeyE
         });
 
         emit CreateToken(tokenCount);
@@ -204,7 +208,8 @@ contract PolicyToken is ERC721 {
         bool isAdmin,
         bool isHolder,
         bool isWorker,
-        string publicKey
+        string publicKeyN,
+        string publicKeyE
     ) {
         uint256 tokenId = ownership(_owner);
 
@@ -214,17 +219,20 @@ contract PolicyToken is ERC721 {
         isAdmin = tokenAuthority.admin;
         isHolder = tokenAuthority.holder;
         isWorker = tokenAuthority.worker;
-        publicKey = tokenAuthority.publicKey;
+        publicKeyN = tokenAuthority.publicKeyN;
+        publicKeyE = tokenAuthority.publicKeyE;
     }
 
     // change public key
-    function keyReflesh(string _publicKey) public {
-        require(bytes(_publicKey).length > 0);
+    function keyReflesh(string _publicKeyN, string _publicKeyE) public {
+        require(bytes(_publicKeyN).length > 0);
+        require(bytes(_publicKeyE).length > 0);
 
         uint256 tokenId = ownership(msg.sender);
 
         //require(tokenId > 0);
 
-        allToken[tokenId].publicKey = _publicKey;
+        allToken[tokenId].publicKeyN = _publicKeyN;
+        allToken[tokenId].publicKeyE = _publicKeyE;
     }
 }

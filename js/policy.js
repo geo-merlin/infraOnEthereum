@@ -30,9 +30,12 @@ window.addEventListener('load', () => {
                     console.log(balance);
                     if (Number(balance) === 0) {
                         $("#outputs").html("トークンが作成されるのを待機しています。");
-                        createAccount(public_key_n, public_key_e).on("receipt", (result) => {
+                        createToken(public_key_n, public_key_e).on("receipt", (result) => {
                             console.log(result);
-                            $("#outputs").html("公開鍵 " + public_key + " でトークンを作成しました。");
+                            $("#outputs").html("<p>登録された公開鍵は次のとおりです。<ul>"
+                            + "<li>N: " + public_key_n + "</li>"
+                            + "<li>E: " + public_key_e + "</li>"
+                            + "</ul></p>");
                         }).on("error", (error) => {
                             console.error(error);
                             $("#outputs").html("トークンの作成に失敗しました。");
@@ -51,21 +54,57 @@ window.addEventListener('load', () => {
             }
         });
 
-        $("#checkAuthority").on("click", () => {
+        $("#deleteToken").on("click", () => {
             $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
-            checkAuthority(user_account).then((authority) => {
-                console.log(authority);
-                $("#allAuthority").html("<p>あなたが持っている権限は次のとおりです。<ul>"
-                + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
-                + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
-                + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
-                + "</ul></p><p>公開鍵は次のとおりです。<ul>"
-                + "<li>N: " + authority.publicKeyN + "</li>"
-                + "<li>E: " + authority.publicKeyE + "</li>"
-                + "</ul></p>");
+            balanceOf(user_account).then((balance) => {
+                console.log(balance);
+                if (Number(balance) > 0) {
+                    $("#outputs").html("トークンが削除されるのを待機しています。");
+                    deleteToken().on("receipt", (result) => {
+                        console.log(result);
+                        $("#outputs").html("トークンの削除に成功しました。");
+                    }).on("error", (error) => {
+                        console.error(error);
+                        $("#outputs").html("トークンの削除に失敗しました。");
+                    });
+                } else if (Number(balance) === 0) {
+                    $("#outputs").html("あなたはまだトークンを持っていません。");
+                } else {
+                    $("#outputs").html("残高が不明な値です。");
+                }
             }, (error) => {
                 console.error(error);
-                $("#allAuthority").html("トークンの取得に失敗しました");
+                $("#outputs").html("残高の取得に失敗しました。");
+            });
+        });
+
+        $("#checkAuthority").on("click", () => {
+            $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
+            balanceOf(user_account).then((balance) => {
+                console.log(balance);
+                if (Number(balance) > 0) {
+                    checkAuthority(user_account).then((authority) => {
+                        console.log(authority);
+                        $("#allAuthority").html("<p>あなたが持っている権限は次のとおりです。<ul>"
+                        + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
+                        + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
+                        + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
+                        + "</ul></p><p>公開鍵は次のとおりです。<ul>"
+                        + "<li>N: " + authority.publicKeyN + "</li>"
+                        + "<li>E: " + authority.publicKeyE + "</li>"
+                        + "</ul></p>");
+                    }, (error) => {
+                        console.error(error);
+                        $("#outputs").html("トークンの取得に失敗しました");
+                    });
+                } else if (Number(balance) === 0) {
+                    $("#outputs").html("あなたはまだトークンを持っていません。");
+                } else {
+                    $("#outputs").html("残高が不明な値です。");
+                }
+            }, (error) => {
+                console.error(error);
+                $("#outputs").html("残高の取得に失敗しました。");
             });
         });
 
@@ -127,7 +166,7 @@ window.addEventListener('load', () => {
 });
 
 const balanceOf = (owner) => {
-    return contract.methods.ownership(owner).call();
+    return contract.methods.balanceOf(owner).call();
 };
 
 const ownership = (owner) => {
@@ -143,14 +182,14 @@ const transfer = (to, token_id) => {
 };
 
 const approve = (to, token_id) => {
-    return contract.methods.transfer(to, token_id).send({from: user_account});
+    return contract.methods.approve(to, token_id).send({from: user_account});
 };
 
 const takeOwnership = (token_id) => {
     return contract.methods.takeOwnership(token_id).send({from: user_account});
 };
 
-const createAccount = (public_key_n, public_key_e) => {
+const createToken = (public_key_n, public_key_e) => {
     return contract.methods.createToken(public_key_n, public_key_e).send({from: user_account});
 }
 
