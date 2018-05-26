@@ -28,22 +28,25 @@
     <script language="javascript" type="text/javascript" src="js/policy.js"></script>
     <div id="commands" style="margin: 10px;">
       <div class="command">
-        <button type="button" id="createToken" class="btn btn-primary">作成</button>
+        <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
         <input type="textbox" id="public-key-n-input" class="form-control" placeholder="公開鍵Nを入力してください" />
         <input type="textbox" id="public-key-e-input" class="form-control" placeholder="公開鍵Eを入力してください" />
       </div>
       <div class="command">
-        <button type="button" id="deleteToken" class="btn btn-primary">削除</button>
+        <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
       </div>
       <div class="command">
-        <button type="button" id="checkAuthority" class="btn btn-primary">確認</button>
+        <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
       </div>
       <div class="command">
-        <button type="button" id="transfer" class="btn btn-primary">送金</button>
+        <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
+      </div>
+      <div class="command">
+        <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
         <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
       </div>
       <div class="command">
-        <button type="button" id="changePublicKey" class="btn btn-primary">変更</button>
+        <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
         <input type="textbox" id="new-public-key-n-input" class="form-control" placeholder="新しい公開鍵Nを入力してください" />
         <input type="textbox" id="new-public-key-e-input" class="form-control" placeholder="新しい公開鍵Eを入力してください" />
       </div>
