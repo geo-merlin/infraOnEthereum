@@ -216,14 +216,12 @@ const keyReflesh = (public_key_n, public_key_e) => {
 const requireInfo = (owner, file_name) => {
     const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
     const data = {
-        owner: encodeURIComponent(owner),
-        name: encodeURIComponent(file_name)
+        owner: encodeURIComponent(owner)
     };
     const header = {
         url: api_url,
         type: "GET",
-        contentType: "application/json",
-        dataType: "json",
+        dataType: "binary",
         cache: false,
         data: data
     };
