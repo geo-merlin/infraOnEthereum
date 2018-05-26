@@ -228,6 +228,8 @@ const requireInfo = (owner, file_name) => {
         data: data
     };
     const f = (result) => {
+        const signed_url = decrypt(result);
+        window.href.location = signed_url;
         console.log(result);
     };
     const g = (error) => {
@@ -236,4 +238,25 @@ const requireInfo = (owner, file_name) => {
 
     $.ajax(header).then(f, g);
     //$.get(api_url, data, f);
+}
+
+const keyGen = (pass) =>{
+    window.RSAkey = cryptico.generateRSAKey("jiji", 1024);
+}
+
+const popUpKeygen = ()=>{
+    alert("鍵を作成して下さい");
+}
+
+const decrypt = (m_list) => {
+   
+    if(!RSAkey){popUpKeygen();}
+
+    var result_url = "";
+    m_list.forEach(function(m){
+        const big_m = new BigInteger(m));
+        const str = String.fromCharCode(big_m.modPow(RSAkey.d,RSAkey.n).toString());
+        result_url += str;
+    }
+    return result_url;
 }
