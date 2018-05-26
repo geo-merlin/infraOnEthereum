@@ -215,18 +215,17 @@ const keyReflesh = (public_key_n, public_key_e) => {
 
 const requireInfo = (owner, file_name) => {
     const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
-        //+ "?owner=" + encodeURIComponent(owner) + "&name=" + encodeURIComponent(file_name);
     const data = {
-        owner: owner,
-        name: file_name
+        owner: encodeURIComponent(owner),
+        name: encodeURIComponent(file_name)
     };
     const header = {
         url: api_url,
         type: "GET",
         contentType: "application/json",
         dataType: "json",
-        cache: false
-        //,data: data
+        cache: false,
+        data: data
     };
     const f = (result) => {
         console.log(result);
@@ -235,6 +234,6 @@ const requireInfo = (owner, file_name) => {
         console.error(error);
     };
 
-    //$.ajax(header).then(f, g);
-    $.get(api_url, data, f);
+    $.ajax(header).then(f, g);
+    //$.get(api_url, data, f);
 }
