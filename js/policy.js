@@ -1,4 +1,12 @@
+"use strict";
+
 $(() => {
+  try {
+    window.RSAKey = parseRSAKey(JSON.parse(localStorage.getItem("RSAKey")));
+  } catch (e) {
+    console.log("RSAキーが取得できません。");
+  }
+
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
@@ -18,19 +26,21 @@ $(() => {
         window.user_account = accounts[0];
 
         $("#createToken").on("click", () => {
-            const public_key_n = $("#public-key-n-input").val();
-            const public_key_e = $("#public-key-e-input").val();
-            console.log(public_key_n, public_key_e);
-            if (public_key_n.length > 0 && public_key_e.length > 0) {
+            const password = $("#password-input").val();
+            console.log(password);
+            if (password.length > 0) {
                 balanceOf(user_account).then((balance) => {
                     console.log(balance);
                     if (Number(balance) === 0) {
                         $("#outputs").html("トークンが作成されるのを待機しています。");
-                        createToken(public_key_n, public_key_e).on("receipt", (result) => {
+                        keyGen(password);
+                        const n = RSAKey.n.toString();
+                        const e = String(RSAKey.e);
+                        createToken(n, e).on("receipt", (result) => {
                             console.log(result);
                             $("#outputs").html("<p>登録された公開鍵は次のとおりです。<ul>"
-                            + "<li>N: " + public_key_n + "</li>"
-                            + "<li>E: " + public_key_e + "</li>"
+                            + "<li>N: " + n + "</li>"
+                            + "<li>E: " + e + "</li>"
                             + "</ul></p>");
                         }).on("error", (error) => {
                             console.error(error);
@@ -137,18 +147,20 @@ $(() => {
         });
 
         $("#changePublicKey").on("click", () => {
-            const public_key_n = $("#new-public-key-n-input").val();
-            const public_key_e = $("#new-public-key-e-input").val();
-            console.log(public_key_n, public_key_e);
-            if (public_key_n.length > 0 && public_key_e.length > 0) {
+            const password = $("#new-password-input").val();
+            console.log(password);
+            if (password.length > 0) {
                 ownership(user_account).then((token_id) => {
                     console.log(token_id);
                     $("#outputs").html("公開鍵が変更されるのを待機しています。");
-                    keyReflesh(public_key_n, public_key_e).on("receipt", (result) => {
+                    keyGen(password);
+                    const n = RSAKey.n.toString();
+                    const e = String(RSAKey.e);
+                    keyReflesh(n, e).on("receipt", (result) => {
                         console.log(result);
                         $("#outputs").html("<p>公開鍵を次のように変更しました。<ul>"
-                        + "<li>N: " + public_key_n + "</li>"
-                        + "<li>E: " + public_key_e + "</li>"
+                        + "<li>N: " + n + "</li>"
+                        + "<li>E: " + e + "</li>"
                         + "</ul></p>");
                     }).on("error", (error) => {
                         console.error(error);
@@ -221,40 +233,76 @@ const requireInfo = (owner, file_name) => {
     const header = {
         url: api_url,
         type: "GET",
-        dataType: "binary",
+        dataType: "json",
         cache: false,
         data: data
     };
     const f = (result) => {
-        const signed_url = decrypt(result);
-        window.href.location = signed_url;
         console.log(result);
+        const signed_url = decrypt(result);
+        console.log(signed_url);
+        //window.location.href = signed_url;
     };
     const g = (error) => {
         console.error(error);
     };
 
     $.ajax(header).then(f, g);
-    //$.get(api_url, data, f);
 }
 
-const keyGen = (pass) =>{
-    window.RSAkey = cryptico.generateRSAKey("jiji", 1024);
-}
+const parseRSAKey = (keyJSON) => {
+    if (keyJSON) {
+        return {
+            coeff: new BigInteger(keyJSON.coeff),
+            d: new BigInteger(keyJSON.d),
+            dmp1: new BigInteger(keyJSON.dmp1),
+            dmq1: new BigInteger(keyJSON.dmq1),
+            e: keyJSON.e,
+            n: new BigInteger(keyJSON.n),
+            p: new BigInteger(keyJSON.p),
+            q: new BigInteger(keyJSON.q)
+        };
+    }
+};
 
-const popUpKeygen = ()=>{
+const stringifyRSAKey = (RSAKey) => {
+    if (RSAKey) {
+        return JSON.stringify({
+            coeff: RSAKey.coeff.toString(),
+            d: RSAKey.d.toString(),
+            dmp1: RSAKey.dmp1.toString(),
+            dmq1: RSAKey.dmq1.toString(),
+            e: RSAKey.e,
+            n: RSAKey.n.toString(),
+            p: RSAKey.p.toString(),
+            q: RSAKey.q.toString()
+        });
+    }
+};
+
+const keyGen = (pass) => {
+    RSAKey = cryptico.generateRSAKey(pass, 1024);
+    localStorage.setItem("RSAKey", stringifyRSAKey(RSAKey));
+};
+
+const popUpKeygen = () => {
     alert("鍵を作成して下さい");
-}
+};
 
 const decrypt = (m_list) => {
-   
-    if(!RSAkey){popUpKeygen();}
-
-    var result_url = "";
-    m_list.forEach(function(m){
-        const big_m = new BigInteger(m));
-        const str = String.fromCharCode(big_m.modPow(RSAkey.d,RSAkey.n).toString());
-        result_url += str;
+    if (!RSAKey) {
+        popUpKeygen();
     }
+
+    let result_url = "";
+    const big_d = RSAKey.d;
+    const big_n = RSAKey.n;
+
+    m_list.forEach((m) => {
+        const big_m = new BigInteger(String(m));
+        const char = big_m.modPow(big_d, big_n).toString();
+        const str = String.fromCharCode(char);
+        result_url += str;
+    });
     return result_url;
-}
+};

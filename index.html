@@ -29,8 +29,7 @@
     <div id="commands" style="margin: 10px;">
       <div class="command">
         <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
-        <input type="textbox" id="public-key-n-input" class="form-control" placeholder="公開鍵Nを入力してください" />
-        <input type="textbox" id="public-key-e-input" class="form-control" placeholder="公開鍵Eを入力してください" />
+        <input type="textbox" id="password-input" class="form-control" placeholder="パスワードを入力してください" />
       </div>
       <div class="command">
         <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
@@ -47,8 +46,7 @@
       </div>
       <div class="command">
         <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
-        <input type="textbox" id="new-public-key-n-input" class="form-control" placeholder="新しい公開鍵Nを入力してください" />
-        <input type="textbox" id="new-public-key-e-input" class="form-control" placeholder="新しい公開鍵Eを入力してください" />
+        <input type="textbox" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" />
       </div>
     </div>
     <div id="outputs" class="output"></div>
@@ -152,7 +150,7 @@
               <p>お楽しみ頂けたでしょうか？
                  <br>このシステムはホンの始まりに過ぎません。先ほど１つのトークンに１つの公開鍵を追加することで可能性が大きく広がったことを伝えましたが、この連鎖・ネットが生み出す新しい世界をまだ誰も知りません。７２１の送信は、APIエコノミーにシェアリングをもたらし、世界中の企業を開放的でダイナミックな組織にするでしょう。もしかしたら、僕たちの会社情報トークンもどこかの取引所で売買されるようになるかもしれないのです。
               </p>
-             
+
               <p><br><b style="color:red;">僕たちはコードを公開し、求める人全員が使えるようにします。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
             </div>
           </div>
@@ -206,7 +204,7 @@
     </div><!-- #myModal -->
 
     <script>
-      
+
       var last=1;
       var fontLarge=function(){$("p").css("fontSize",18);}
       var pop = function(num){showModal("#modal"+num);last=num;}
