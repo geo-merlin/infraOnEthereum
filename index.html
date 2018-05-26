@@ -49,5 +49,187 @@
       </div>
     </div>
     <div id="outputs" class="output"></div>
+    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="modaltitle" color="blue" style="float:left;"> 社内？システムにようこそ</h1>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
+          </div>
+          <div class="modal-body" id="the_modal_content">
+　　　　　  <div>
+              <p>このページはイーサリアムを使って企業の情報を公開するシステムです。
+　　　　　　　<br></br>
+              <br>イーサリアムはウェブ上での契約が行える「<b>スマートコントラクト</b>」という機能を持ちます。つまり、<b>知らない人同士が破られない約束をできる</b>性質を利用して様々なことを行えます。今回は、人をアクセスレベルに応じて違う情報にアクセスしてもらうシステムを作りました。暗号学的にシンプルかつ強い拡張性を持つ方法ですので、是非ナカミを知って下さい。</p>
+              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <h3><b>ERC７２１</b></h3>
+              <p>このシステムの中核をに担うのは、この世に一つしかないデジタルデータを作るERC７２１という仕組みです。これはデータとしては仮想通貨の延長です。仮想通貨システムに１円玉を作り、番号と名前を書けるようにしたらどうなるか考えてみましょう。それは送信可能なので、人に渡すことができますが、番号と名前が書いてあるので、他と区別することができます。つまり、あなたのスマフォや服のように、モノとして扱えるので、使用と売買ができます。”実物”が仮想世界に生まれたと考えてください。この"実物"をERC７２１トークンと呼びます
+　　　　　　　<br></br>
+              <br>この発明品を少し工夫して利用すると、さらに多くの約束を作ることができます。
+　　　　　　　<br>この「１円玉」に鍵をつけるのです。
+              </p>
+　　　　　　　<br></br>
+              <h3><b>ERC７２１に公開鍵をつける</b></h3>
+              <p>人を持っているERC７２１トークンに応じて区別したいと考えます。この時、そのトークンは所有物ですので、持っている人だけが好きなタイミングで公開鍵を全員に見えるように書いておくことができます。色々なシステムはこの公開鍵にアクセスしてデータを暗号化して返えすだけでセキュリティと権限の問題はバッチリです。どうせ本物の所有者だけが秘密鍵を持っていて暗号を解いてナカミを見ることができるのですから。</p>
+              <p><br><b style="color:red;">この鍵つきトークンは、コピー可能な従来の秘密鍵と違い本物の鍵のように扱えます。</b>詳細を次のページで見ていきましょう。</p>
+            </div>
+          </div>
+          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- #myModal -->
+    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="modaltitle" color="blue" style="float:left;"> 鍵付きERC７２１で限定公開機能</h1>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
+          </div>
+          <div class="modal-body" id="the_modal_content">
+　　　　　  <div>
+              <p>ではこのトークン仕様何が嬉しいのでしょうか？まずは図で説明しましょう。
+　　　　　　　<br></br>
+              <br></p>
+              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <h3><b>パスワード変更</b></h3>
+              <p>まず、このパスワード（公開鍵）なんですが、当然トークンの持ち主は好きな時に勝手に変えることができます。公開鍵を変える関数をコントラクトにつけてあるので、トランザクションと一緒に公開鍵を送れば良いだけです。ペアの秘密鍵を自分のパソコンに保存する必要がありますが、紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。
+              パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。
+　　　　　　　<br></br>
+              </p>
+　　　　　　　<br></br>
+              <h3><b>譲渡</b></h3>
+              <p>前のページで伝えたとおり、送金（送信）可能です。パスワードはそのままでも問題ありません。秘密鍵さえ教えなければ相手にとって意味はありませんし、受け取った相手は最初にパスワードを変更することから始めるでしょう。</p>
+　　　　　　　<p>普通のパスワード・秘密鍵であれば、相手に教えても自分がコピーを持てるので相手の利益は少なかったりしますが、この鍵付きトークンであれば送り主はそのうち使えなくなるので、より現実の鍵に近づいたと言えるでしょう。</p>
+              <p><br><b style="color:red;">これは株券に実用機能をつけることや、ウェブ上の組織を構築することなど</b>、僕の想像できるだけでもユースケースが沢山あります。</p><p>そして会社をイーサリアム化する根幹機能となるでしょう。</p>
+              <p>次のページで実際に僕たちの作ったトークンを使ってみましょう。</p>
+            </div>
+          </div>
+          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- #myModal -->
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="modaltitle" color="blue" style="float:left;"> 社内？システムにようこそ</h1>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
+          </div>
+          <div class="modal-body" id="the_modal_content">
+　　　　　  <div>
+              <p>まずMetamaskが入っていないならインストールしましょう。＜リンク＞
+　　　　　　　<br></br>
+              <br>
+              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <h3><b>会社ごっこを始めよう</b></h3>
+              このボタンを押して下さい。とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。
+　　　　　　　<br></br>
+              <br>つぎはこのボタンを押して少し待って下さい。
+　　　　　　　<br>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？
+              </p>
+　　　　　　　<br></br>
+　　　　　　　では会社に情報の開示を求めましょう。会社側はあなたのトークンを元に返す情報を変えます。
+              <h3><b>これ作るの大変だった？</b></h3>
+              <p>実は全く大変ではありませんでした。Solidityの200行のコードがブロックチェーンで動き、残りはJSとPythonで300行くらいです。
+              <br><br>なぜこんなに苦労しないのかと言えば、設計がシンプルだからです。この設計は１０年前には成り立たないもので、イーサリアムが生まれたからできたことです。いかにイーサリアムが素晴らしいかということの実証を僕たちができたことは嬉しい限りです。
+              <br><br>もし、このインフラをイチから作るとすれば、通信・データベース・プロセスの３つの要素を同期する地獄のプログラミングが始まってしまいますが、これを１週間で作れる時代がブロックチェーンの時代と言えます。</p>
+
+              <h3><b>ERC７２１、そしてイーサリアムの本当の可能性</b></h3>
+              <p>お楽しみ頂けたでしょうか？
+                 <br>このシステムはホンの始まりに過ぎません。先ほど１つのトークンに１つの公開鍵を追加することで可能性が大きく広がったことを伝えましたが、この連鎖・ネットが生み出す新しい世界をまだ誰も知りません。７２１の送信は、APIエコノミーにシェアリングをもたらし、世界中の企業を開放的でダイナミックな組織にするでしょう。もしかしたら、僕たちの会社情報トークンもどこかの取引所で売買されるようになるかもしれないのです。
+              </p>
+             
+              <p><br><b style="color:red;">僕たちはコードを公開し、求める人全員が使えるようにします。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
+            </div>
+          </div>
+          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- #myModal -->
+
+    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="modaltitle" color="blue" style="float:left;"> コミュニテイにようこそ</h1>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
+          </div>
+          <div class="modal-body" id="the_modal_content">
+　　　　　  <div>
+              <p>このコミュニティはイーサリアムを使った組織運営を増やすためのコミュニティです。最初はERC７２１の面白い使い方について今回実験したもの以上のことを考えます。
+　　　　　　　<br></br>
+              <br>トークンエコノミーに関する交流と議論、遊びとコーディングに面白い人たちが惹かれるだけで、何年かの社会の雰囲気と気分はめでたいものになると確信しています。こんな変な文章をここまで読んでくれたあなたは面白い人に決まっているのですぐに入ってもらいたい！<b></b></p>
+              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <h3><b>Twitter</b></h3>
+              <p><a>このアカウント</a>をフォローし、「#読んだ」が入った文章でリプライを送ってくれたら、<a>このリスト</a>に加えます。このリストにいることはメンバーである証になります。
+　　　　　　　<br></br>
+              </p>
+　　　　　　　<br></br>
+              <h3><b>Slack</b></h3>
+              <p>このリンクからSlackに入ってください。情報が一番多く投下されるのはここになるでしょう。ここのメンバーであることもコミュニティのメンバーであることの証になります</p>
+              <h3><b>Github</b></h3>
+　　　　　　　<a></a>
+              <p>ここのコードがブロックチェーンに関わる部分です。わからない部分あったらSlackでどうぞ^^</p>
+              <h3>開発者と仲良くなろう</h3>
+              <p><br><b style="color:yellow;">極度消耗(しなさい)</b></p>
+              <p><br>機械と投資が好きな人。歩きまわる癖があるので、歩いて楽しい京都に住んでいる。ボードゲームに熱狂しがちなのであんまり誘わないでほしい^^<p>
+              <p><br><b style="color:blue;">CoRe</b></p>
+              <p><br>数学科在籍のプログラマー。勝手に紹介すると、合気道に熱心な体育会出身のエンジニア。これだけ仮想通貨のコードをいじっているのに、値段を気にした瞬間すらない不思議な人。</p>
+            </div>
+          </div>
+          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- #myModal -->
+
+    <script>
+      
+      var last=1;
+      var fontLarge=function(){$("p").css("fontSize",18);}
+      var pop = function(num){showModal("#modal"+num);last=num;}
+      var next = function(){showModal();pop(last+1);}
+      var back = function(){showModal();pop(last-1);}
+      var showModal = (function () {
+        var modal_stack = [];
+        return function (modal_name) {
+          if (modal_name) {
+            $(modal_name).on("hidden.bs.modal", function () {
+              $("body").addClass("modal-open"); //スクロールのフォーカスをモーダルに移す
+              $(modal_name).off("hidden.bs.modal");
+              modal_stack.pop();
+            });
+            modal_stack.push(modal_name);
+            //console.log("modal_stack =", modal_stack);
+            $(modal_name).modal("show");
+          } else {
+            $(modal_stack.pop()).modal("hide");
+          }
+        };
+      })();
+      showModal("#modal1");
+
+      var bigTo
+    </script>
+
   </body>
 </html>
