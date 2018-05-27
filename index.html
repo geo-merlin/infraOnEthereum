@@ -30,30 +30,27 @@
             <div class="col-xs-2 col-sm-2 col-lg-2">
             </div>
             <div class="col-xs-8 col-sm-8 col-lg-8">
-                <div id="commands" style="margin: 10px;">
-                  <div class="command">
-                    <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
-                    <input type="textbox" id="public-key-n-input" class="form-control" placeholder="公開鍵Nを入力してください" />
-                    <input type="textbox" id="public-key-e-input" class="form-control" placeholder="公開鍵Eを入力してください" />
-                  </div>
-                  <div class="command">
-                    <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
-                  </div>
-                  <div class="command">
-                    <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
-                  </div>
-                  <div class="command">
-                    <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
-                  </div>
-                  <div class="command">
-                    <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
-                    <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
-                  </div>
-                  <div class="command">
-                    <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
-                    <input type="textbox" id="new-public-key-n-input" class="form-control" placeholder="新しい公開鍵Nを入力してください" />
-                    <input type="textbox" id="new-public-key-e-input" class="form-control" placeholder="新しい公開鍵Eを入力してください" />
-                  </div>
+              <div id="commands" style="margin: 10px;">
+                <div class="command">
+                  <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
+                  <input type="textbox" id="password-input" class="form-control" placeholder="パスワードを入力してください" />
+                </div>
+                <div class="command">
+                  <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
+                </div>
+                <div class="command">
+                  <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
+                </div>
+                <div class="command">
+                  <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
+                </div>
+                <div class="command">
+                  <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
+                  <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
+                </div>
+                <div class="command">
+                  <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
+                  <input type="textbox" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" />
                 </div>
             </div>
             <div class="col-xs-2 col-sm-2 col-lg-2">
@@ -78,7 +75,8 @@
               <br>イーサリアムはウェブ上での契約が行える「<b>スマートコントラクト</b>」という機能を持ちます。つまり、<b>知らない人同士が破られない約束をできる</b>性質を利用して様々なことを行えます。
               今回は、人をアクセスレベルに応じて違う情報にアクセスしてもらうシステムを作りました。誰でも使えるほど暗号学的にシンプルかつ強い拡張性を持つ方法ですので、是非ナカミを知って下さい。</p>
               <p>今回の実験で分かったことは、この手法によって次のようなことができることです。</p>
-              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/before2.jpg" width="100%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/after.jpg" width="100%"></img>
               <p>つまり<b>クラウドの中で重要な部分をイーサリアムに移し変えるだけ</b>です。<br>この「シンプル化」の技術により組織を管理するクラウドは次の効果を受けます。
                 <br><br><b>①　SE業務の簡略化</b>
                   <br>コードの数が減ることはもちろん、人事・引き継ぎも権利トークン（後述）の送信だけで済むので簡略化されます。システムの利用においてトークン保持者（社内ネットの参加者）の自己責任の部分が増えるので、手違いの原因と責任の所在もはっきりするでしょう。
@@ -125,8 +123,9 @@
               <br></p>
               <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
               <h3><b>パスワード変更</b></h3>
-              <p>まず、このパスワード（公開鍵）なんですが、当然トークンの持ち主は好きな時に勝手に変えることができます。公開鍵を変える関数をコントラクトにつけてあるので、トランザクションと一緒に公開鍵を送れば良いだけです。ペアの秘密鍵を自分のパソコンに保存する必要がありますが、紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。
-              パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。
+              <p>まず、このパスワード（公開鍵）なんですが、当然トークンの持ち主は好きな時に勝手に変えることができます。公開鍵を変える関数をコントラクトにつけてあるので、トランザクションと一緒に公開鍵を送れば良いだけです。</p>
+              <p>ペアの秘密鍵を自分のパソコンに保存する必要がありますが、紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。</p>
+              <p>パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。</p>
 　　　　　　　<br></br>
               </p>
 　　　　　　　<br></br>
@@ -159,10 +158,11 @@
               <p>まずMetamaskが入っていないならインストールしましょう。＜リンク＞
 　　　　　　　<br></br>
               <br>
-              <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
               <h3><b>会社ごっこを始めよう</b></h3>
               このボタンを押して下さい。とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。
               <div class="command">
+                  <button type="button" class="btn btn-primary">トークン作成</button>
+                  <input type="textbox" class="form-control" placeholder="パスワードを入力してください" />
               </div>
 　　　　　　　<br></br>
               <br>つぎはこのボタンを押して少し待って下さい。
@@ -234,7 +234,7 @@
     </div><!-- #myModal -->
 
     <script>
-      
+
       var last=1;
       var fontLarge=function(){$("p").css("fontSize",18);}
       var pop = function(num){showModal("#modal"+num);last=num;}
