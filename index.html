@@ -25,38 +25,49 @@
     </style>
   </head>
   <body>
-    <script language="javascript" type="text/javascript" src="js/policy.js"></script>
-    <div id="commands" style="margin: 10px;">
-      <div class="command">
-        <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
-        <input type="textbox" id="public-key-n-input" class="form-control" placeholder="公開鍵Nを入力してください" />
-        <input type="textbox" id="public-key-e-input" class="form-control" placeholder="公開鍵Eを入力してください" />
-      </div>
-      <div class="command">
-        <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
-      </div>
-      <div class="command">
-        <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
-      </div>
-      <div class="command">
-        <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
-      </div>
-      <div class="command">
-        <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
-        <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
-      </div>
-      <div class="command">
-        <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
-        <input type="textbox" id="new-public-key-n-input" class="form-control" placeholder="新しい公開鍵Nを入力してください" />
-        <input type="textbox" id="new-public-key-e-input" class="form-control" placeholder="新しい公開鍵Eを入力してください" />
-      </div>
+    <div id="home-page" class="container content">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-2 col-sm-2 col-lg-2">
+            </div>
+            <div class="col-xs-8 col-sm-8 col-lg-8">
+                <div id="commands" style="margin: 10px;">
+                  <div class="command">
+                    <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
+                    <input type="textbox" id="public-key-n-input" class="form-control" placeholder="公開鍵Nを入力してください" />
+                    <input type="textbox" id="public-key-e-input" class="form-control" placeholder="公開鍵Eを入力してください" />
+                  </div>
+                  <div class="command">
+                    <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
+                  </div>
+                  <div class="command">
+                    <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
+                  </div>
+                  <div class="command">
+                    <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
+                  </div>
+                  <div class="command">
+                    <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
+                    <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
+                  </div>
+                  <div class="command">
+                    <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
+                    <input type="textbox" id="new-public-key-n-input" class="form-control" placeholder="新しい公開鍵Nを入力してください" />
+                    <input type="textbox" id="new-public-key-e-input" class="form-control" placeholder="新しい公開鍵Eを入力してください" />
+                  </div>
+                </div>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2">
+            </div>
+        </div>
     </div>
+
+    <script language="javascript" type="text/javascript" src="js/policy.js"></script>
     <div id="outputs" class="output"></div>
     <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> 社内？システムにようこそ</h1>
+            <h1 id="modaltitle" color="blue" style="float:left;"> 社内システムにようこそ</h1>
             <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
             <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
           </div>
@@ -64,23 +75,36 @@
 　　　　　  <div>
               <p>このページはイーサリアムを使って企業の情報を公開するシステムです。
 　　　　　　　<br></br>
-              <br>イーサリアムはウェブ上での契約が行える「<b>スマートコントラクト</b>」という機能を持ちます。つまり、<b>知らない人同士が破られない約束をできる</b>性質を利用して様々なことを行えます。今回は、人をアクセスレベルに応じて違う情報にアクセスしてもらうシステムを作りました。暗号学的にシンプルかつ強い拡張性を持つ方法ですので、是非ナカミを知って下さい。</p>
+              <br>イーサリアムはウェブ上での契約が行える「<b>スマートコントラクト</b>」という機能を持ちます。つまり、<b>知らない人同士が破られない約束をできる</b>性質を利用して様々なことを行えます。
+              今回は、人をアクセスレベルに応じて違う情報にアクセスしてもらうシステムを作りました。誰でも使えるほど暗号学的にシンプルかつ強い拡張性を持つ方法ですので、是非ナカミを知って下さい。</p>
+              <p>今回の実験で分かったことは、この手法によって次のようなことができることです。</p>
               <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
+              <p>つまり<b>クラウドの中で重要な部分をイーサリアムに移し変えるだけ</b>です。<br>この「シンプル化」の技術により組織を管理するクラウドは次の効果を受けます。
+                <br><br><b>①　SE業務の簡略化</b>
+                  <br>コードの数が減ることはもちろん、人事・引き継ぎも権利トークン（後述）の送信だけで済むので簡略化されます。システムの利用においてトークン保持者（社内ネットの参加者）の自己責任の部分が増えるので、手違いの原因と責任の所在もはっきりするでしょう。
+                <br><br><b>②　セキュリティが高く</b>
+                  <br>システムの脆弱性はよくシステムが複雑であることに起因します。イーサリアムを使った簡略化では、さらにその暗号技術の恩恵を受けることができます。
+                <br><br><b>③　協業の準備が完了 </b>
+                  <br>イーサリアムをメインネットで使うということは、世界中の分散アプリケーションと協業の可能性が生まれるということです。また、透明性が生まれることも協業の重要なファクターとなります。
+              </p>
               <h3><b>ERC７２１</b></h3>
-              <p>このシステムの中核をに担うのは、この世に一つしかないデジタルデータを作るERC７２１という仕組みです。これはデータとしては仮想通貨の延長です。仮想通貨システムに１円玉を作り、番号と名前を書けるようにしたらどうなるか考えてみましょう。それは送信可能なので、人に渡すことができますが、番号と名前が書いてあるので、他と区別することができます。つまり、あなたのスマフォや服のように、モノとして扱えるので、使用と売買ができます。”実物”が仮想世界に生まれたと考えてください。この"実物"をERC７２１トークンと呼びます
+              <p>このシステムの中核をに担うのは、この世に一つしかないデジタルデータを作るERC７２１という仕組みです。これはデータとしては仮想通貨の延長です。仮想通貨システムに１円玉を作り、番号と名前を書けるようにしたらどうなるか考えてみましょう。</p>
+              <p>それは人に渡すこともできますが、番号と名前が書いてあるので、他と区別することができます。つまり、あなたのスマフォや服のように、モノとして扱えるので、使用と売買ができます。<b>”実物”が仮想世界に生まれた</b>と考えてください。この"実物"をERC７２１トークンと呼びます。</p>
 　　　　　　　<br></br>
-              <br>この発明品を少し工夫して利用すると、さらに多くの約束を作ることができます。
-　　　　　　　<br>この「１円玉」に鍵をつけるのです。
+              <br><p>この発明品を少し工夫して利用すると、さらに多くの機能を作ることができます。</p>
+　　　　　　　<br><p>この「１円玉」に鍵をつけるのです。</p>
               </p>
 　　　　　　　<br></br>
               <h3><b>ERC７２１に公開鍵をつける</b></h3>
-              <p>人を持っているERC７２１トークンに応じて区別したいと考えます。この時、そのトークンは所有物ですので、持っている人だけが好きなタイミングで公開鍵を全員に見えるように書いておくことができます。色々なシステムはこの公開鍵にアクセスしてデータを暗号化して返えすだけでセキュリティと権限の問題はバッチリです。どうせ本物の所有者だけが秘密鍵を持っていて暗号を解いてナカミを見ることができるのですから。</p>
+              <p>人を持っているERC７２１トークンに応じて区別したいと考えます。この時、そのトークンは所有物ですので、持っている人だけが好きなタイミングで公開鍵を全員に見えるように書いておくことができます。</p>
+              <p>色々なシステムはこの公開鍵にアクセスしてデータを暗号化して返えすだけでセキュリティと権限の問題はバッチリです。どうせ本物の所有者だけが秘密鍵を持っていて暗号を解いてナカミを見ることができるのですから。</p>
               <p><br><b style="color:red;">この鍵つきトークンは、コピー可能な従来の秘密鍵と違い本物の鍵のように扱えます。</b>詳細を次のページで見ていきましょう。</p>
             </div>
           </div>
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
           </div>
         </div>
@@ -116,6 +140,7 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
           </div>
         </div>
@@ -137,6 +162,8 @@
               <img src="https://s3-ap-northeast-1.amazonaws.com/geomerlin-image/dapps.png" width="80%"></img>
               <h3><b>会社ごっこを始めよう</b></h3>
               このボタンを押して下さい。とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。
+              <div class="command">
+              </div>
 　　　　　　　<br></br>
               <br>つぎはこのボタンを押して少し待って下さい。
 　　　　　　　<br>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？
@@ -153,19 +180,20 @@
                  <br>このシステムはホンの始まりに過ぎません。先ほど１つのトークンに１つの公開鍵を追加することで可能性が大きく広がったことを伝えましたが、この連鎖・ネットが生み出す新しい世界をまだ誰も知りません。７２１の送信は、APIエコノミーにシェアリングをもたらし、世界中の企業を開放的でダイナミックな組織にするでしょう。もしかしたら、僕たちの会社情報トークンもどこかの取引所で売買されるようになるかもしれないのです。
               </p>
              
-              <p><br><b style="color:red;">僕たちはコードを公開し、求める人全員が使えるようにします。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
+              <p><br><b style="color:red;">僕たちはコードを公開します。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
             </div>
           </div>
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
           </div>
         </div>
       </div>
     </div><!-- #myModal -->
 
-    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -199,7 +227,7 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
           </div>
         </div>
       </div>
@@ -231,7 +259,6 @@
       })();
       showModal("#modal1");
 
-      var bigTo
     </script>
 
   </body>
