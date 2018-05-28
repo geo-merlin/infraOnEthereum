@@ -193,7 +193,7 @@
 　　　　　　　<br></br>
               <br>
               <h3><b>会社ごっこを始めよう</b></h3>
-              <p>上の準備が終わったなら、このボタンを押して下さい！とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。</p>
+              <p>上の準備が終わったなら、このボタンを押して下さい！とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。これから使うパスワードも忘れずに！</p>
               <div class="command">
                   <button type="button" id="createToken2" class="btn btn-primary">トークン作成</button>
                   <input type="textbox" id="password-input2" class="form-control" placeholder="パスワードを入力してください" />
@@ -202,7 +202,7 @@
 
               <br><p>つぎはこのボタンを押して少し待って下さい。</p>
               <div class="command">
-                  <button type="button" id="checkAuthority2" class="btn btn-secondary">所持トークン確認</button>
+                  <button type="button" id="checkAuthority2" class="btn btn-info">所持トークン確認</button>
               </div>
               <div class="output"></div>
 　　　　　　　<br><p>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？</p>
@@ -211,11 +211,12 @@
               <br><p>今回は、署名付きURLを先ほどあなたがトークンに書き込んだ公開鍵で暗号化して送ってもらいます。</p>
               <br><p>暗号化に加え、時間制限がつくため、これが最もセキュリティの高い方法でしょう。</p>
               <br>
-              <button type="button" id="requestInfo2" class="btn btn-secondary">情報開示</button>
-              <br></br><br></br>
+              <div class="command">
+                  <button type="button" id="requestInfo2" class="btn btn-info">情報開示</button>
+              </div>
+              <div class="output"></div>
               <p>他にも、送金や他の人のトークンの確認などができます。後でご堪能あれ！</p>
-　　　　　　　<br></br>
-　　　　　　　<br></br>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/shutterstock_561819103.jpg" width="60%"></img>
               <h3><b>これ作るの大変だった？</b></h3>
               <p>実は全く大変ではありませんでした。Solidityの200行のコードがブロックチェーンで動き、残りはJSとPythonで300行くらいです。</p>
               <br><p>なぜこんなに苦労しないのかと言えば、設計がシンプルだからです。</p>
@@ -264,8 +265,9 @@
               <h3><b>Slack</b></h3>
               <p><a href="https://join.slack.com/t/geomarlin/shared_invite/enQtMzYyNTQ1MjEyNjYwLWRiNTY0M2NiYjFmYTYwMzMzMmRiNTMyOTE4MWZlNzg5YjJmOTdiNTI1ODJiNGI5NWY2ZTJjZWEwZTFkYzFmMzY">このリンク</a>からSlackに入ってください。情報が一番多く投下されるのはここになるでしょう。ここのメンバーであることもコミュニティのメンバーであることの証になります</p>
               <h3><b>Github</b></h3>
-　　　　　　　<a href="https://github.com/geo-merlin/infraOnEthereum">infraOnEthereum</a>
+　　　　　　　<br><p><a href="https://github.com/geo-merlin/infraOnEthereum">infraOnEthereum</a></p>
               <p>ここのコードがブロックチェーンに関わる部分です。わからない部分あったらSlackでどうぞ^^</p>
+              <br></br>
               <h3>開発者と仲良くなろう</h3>
               <br><p><a href="https://twitter.com/leo_hio"><b style="color:blue;">極度消耗(しなさい)</b></a></p>
               <p><br>機械と投資が好きな人。歩きまわる癖があるので、歩いて楽しい京都に住んでいる。ボードゲームに熱狂しがちなのであんまり誘わないでほしい^^<p>
@@ -285,7 +287,8 @@
     <script>
     var modal_stack = [];
       var last=1;
-      var fontLarge=function(){$("p").css("fontSize",18);}
+      var fontbig=false;
+      var fontLarge=function(){if(fontbig){alert("もう文字は大きいです");return false;};$("p").css("fontSize",18);fontbig=true;}
       var pop = function(num){showModal("#modal"+num);last=num;}
       var next = function(){showModal();setTimeout(() => {pop(last+1);}, 500);}
       var back = function(){showModal();setTimeout(() => {pop(last-1);}, 500);}
