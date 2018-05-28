@@ -198,7 +198,7 @@ contract PolicyToken is ERC721 {
         //require(tokenId > 0);
 
         totalSupply = totalSupply.sub(1);
-        delete allToken[tokenCount];
+        delete allToken[tokenId];
         delete ownershipTokenId[msg.sender];
         delete indexToOwner[tokenId];
     }

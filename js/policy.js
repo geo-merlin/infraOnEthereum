@@ -88,6 +88,7 @@ const createCommand = () => {
                 const e = String(myRSAKey.e);
                 keyReflesh(n, e).on("receipt", (result) => {
                     console.log(result);
+                    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
                     output("<p>パスワードを" + password + "に変更しました。</p>");
                 }).on("error", (error) => {
                     console.error(error);
@@ -201,6 +202,7 @@ const createTokenInterface = (password) => {
                 const e = String(myRSAKey.e);
                 createToken(n, e).on("receipt", (result) => {
                     console.log(result);
+                    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
                     output("登録されたパスワードは" + password + "です。");
                 }).on("error", (error) => {
                     console.error(error);
@@ -304,7 +306,6 @@ const stringifyRSAKey = (RSAKey) => {
 const keyGen = (pass) => {
     console.log(pass);
     window.myRSAKey = cryptico.generateRSAKey(pass, 1024);
-    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
 };
 
 const popUpKeygen = () => {
@@ -321,8 +322,8 @@ const decrypt = (m_list) => {
     const big_n = myRSAKey.n;
 
     m_list.forEach((m) => {
-        const big_m = new BigInteger(String(m));
-        const char = big_m.modPow(big_d, big_n).toString();
+        const big_m = new BigInteger(m);
+        const char = big_m.modPow(big_d, big_n).divide(new BigInteger("1" + Array(200).fill("0").join(""))).toString();
         const str = String.fromCharCode(char);
         result_url += str;
     });

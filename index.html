@@ -131,8 +131,7 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+            <button type="button" class="btn btn-primary" onclick="next();">NEXT</button>
           </div>
         </div>
       </div>
@@ -168,8 +167,8 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+            <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
+            <button type="button" class="btn btn-primary" onclick="next();">NEXT</button>
           </div>
         </div>
       </div>
@@ -230,8 +229,8 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="next();">NEXT</button>
+            <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
+            <button type="button" class="btn btn-primary" onclick="next();">NEXT</button>
           </div>
         </div>
       </div>
@@ -271,39 +270,43 @@
           <div class="loader loader-4" id="loading2" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="back();">BACK</button>
+            <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
           </div>
         </div>
       </div>
     </div><!-- #myModal -->
 
     <script>
+    var modal_stack = [];
       var last=1;
       var fontLarge=function(){$("p").css("fontSize",18);}
       var pop = function(num){showModal("#modal"+num);last=num;}
-      var next = function(){showModal();pop(last+1);}
-      var back = function(){showModal();pop(last-1);}
+      var next = function(){showModal();setTimeout(() => {pop(last+1);}, 500);}
+      var back = function(){showModal();setTimeout(() => {pop(last-1);}, 500);}
       var showModal = (function () {
-        var modal_stack = [];
         return function (modal_name) {
-          if (modal_name) {
-            $(modal_name).on("hidden.bs.modal", function () {
-              $("body").addClass("modal-open"); //スクロールのフォーカスをモーダルに移す
-              $(modal_name).off("hidden.bs.modal");
-              modal_stack.pop();
-              if (modal_stack.length === 0) {
-                $("body").removeClass("modal-open"); //スクロールのフォーカスをbodyに移す
-              }
-            });
-            modal_stack.push(modal_name);
-            //console.log("modal_stack =", modal_stack);
-            $(modal_name).modal("show");
-          } else {
-            $(modal_stack.pop()).modal("hide");
-            if (modal_stack.length === 0) {
-              $("body").removeClass("modal-open"); //スクロールのフォーカスをbodyに移す
+            console.log("showModal");
+            if (modal_name) {
+                if (modal_stack.length > 0) {
+                    $(modal_name)
+                        .on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open"); //スクロールのフォーカスをモーダルに移す
+                            $(modal_name).off("hidden.bs.modal");
+                            modal_stack.pop();
+                        });
+                } else {
+                    $(modal_name)
+                        .on("hidden.bs.modal", function () {
+                            $(modal_name).off("hidden.bs.modal");
+                            modal_stack.pop();
+                        });
+                }
+                modal_stack.push(modal_name);
+                //console.log("modal_stack =", modal_stack);
+                $(modal_name).modal("show");
+            } else {
+                $(modal_stack.pop()).modal("hide");
             }
-          }
         };
       })();
       showModal("#modal1");
