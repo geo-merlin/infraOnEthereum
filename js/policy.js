@@ -1,5 +1,7 @@
 "use strict";
 
+const is_pc = ($(window).width()>$(window).height())
+
 const createCommand = () => {
     $("#createToken").on("click", () => {
         const password = $("#password-input").val();

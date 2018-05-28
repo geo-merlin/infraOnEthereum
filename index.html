@@ -183,8 +183,10 @@
           </div>
           <div class="modal-body" id="the_modal_content">
 　　　　　  <div>
-              <p>まずMetamaskが入っていないならインストールしましょう。この方のページを参考にして下さい。</p>
+              <p>まず、今パソコンでお使いのブラウザにMetamaskが入っていないならインストールしましょう。</p>
+              <br><p>この方のページを参考にして下さい。（スマホには現在対応していません）</p>
               <a href="https://coin-textbook.com/metamask/">MetaMask（メタマスク）の使い方：ウォレット作成や送金方法を解説</a>
+              <br></br>
               <p>Metamaskの一番上にある文字が「MainNet」ではなく、「<b style="color:red;">Reopsten</b>」になっていることを確認して下さい。</p>
               <p><br>「BUY」を押し、「FAUCET」を「Request」して下さい。しばらく待つと１ETHが降ってきます。</p>
 　　　　　　　<br></br>
@@ -205,8 +207,11 @@
 　　　　　　　<br><p>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？</p>
 　　　　　　　<br></br>
 　　　　　　　<p>では会社に情報の開示を求めましょう。会社側はあなたのトークンの権限を元に、見せる情報を変えます。</p>
-              <button type="button" id="requestInfo2" class="btn btn-secondary">情報開示</button>
+              <br><p>今回は、署名付きURLを先ほどあなたがトークンに書き込んだ公開鍵で暗号化して送ってもらいます。</p>
+              <br><p>暗号化に加え、時間制限がつくため、これが最もセキュリティの高い方法でしょう。</p>
               <br>
+              <button type="button" id="requestInfo2" class="btn btn-secondary">情報開示</button>
+              <br></br><br></br>
               <p>他にも、送金や他の人のトークンの確認などができます。後でご堪能あれ！</p>
 　　　　　　　<br></br>
 　　　　　　　<br></br>
@@ -256,14 +261,14 @@
               </p>
 　　　　　　　<br></br>
               <h3><b>Slack</b></h3>
-              <p>このリンクからSlackに入ってください。情報が一番多く投下されるのはここになるでしょう。ここのメンバーであることもコミュニティのメンバーであることの証になります</p>
+              <p><a href="https://join.slack.com/t/geomarlin/shared_invite/enQtMzYyNTQ1MjEyNjYwLWRiNTY0M2NiYjFmYTYwMzMzMmRiNTMyOTE4MWZlNzg5YjJmOTdiNTI1ODJiNGI5NWY2ZTJjZWEwZTFkYzFmMzY">このリンク</a>からSlackに入ってください。情報が一番多く投下されるのはここになるでしょう。ここのメンバーであることもコミュニティのメンバーであることの証になります</p>
               <h3><b>Github</b></h3>
-　　　　　　　<a></a>
+　　　　　　　<a href="https://github.com/geo-merlin/infraOnEthereum">infraOnEthereum</a>
               <p>ここのコードがブロックチェーンに関わる部分です。わからない部分あったらSlackでどうぞ^^</p>
               <h3>開発者と仲良くなろう</h3>
-              <br><a href="https://twitter.com/leo_hio"><b style="color:blue;">極度消耗(しなさい)</b></a>
+              <br><p><a href="https://twitter.com/leo_hio"><b style="color:blue;">極度消耗(しなさい)</b></a></p>
               <p><br>機械と投資が好きな人。歩きまわる癖があるので、歩いて楽しい京都に住んでいる。ボードゲームに熱狂しがちなのであんまり誘わないでほしい^^<p>
-              <br><a href="https://twitter.com/CoRe1o3"><b style="color:blue;">Core</b></a>
+              <br><p><a href="https://twitter.com/CoRe1o3"><b style="color:blue;">CoRe</b></a></p>
               <p><br>数学科在籍のプログラマー。勝手に紹介すると、合気道に熱心な体育会出身のエンジニア。これだけ仮想通貨のコードをいじっているのに、値段を気にした瞬間すらない不思議な人。</p>
             </div>
           </div>
@@ -309,7 +314,8 @@
             }
         };
       })();
-      showModal("#modal1");
+      //showModal("#modal1");
+      if(is_pc){fontLarge();};
 
     </script>
 
