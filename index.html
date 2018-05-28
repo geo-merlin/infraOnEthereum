@@ -15,8 +15,9 @@
       .output{
         border: 1px solid black;
         min-height: 20px;
-        margin: 10px;
+        margin: 10px 10px 100px;
         padding: 10px;
+        font-size: 22px;
       }
       .form-control{
         display: inline !important;
@@ -290,7 +291,6 @@
       var back = function(){showModal();setTimeout(() => {pop(last-1);}, 500);}
       var showModal = (function () {
         return function (modal_name) {
-            console.log("showModal");
             if (modal_name) {
                 if (modal_stack.length > 0) {
                     $(modal_name)

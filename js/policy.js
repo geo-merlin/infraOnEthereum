@@ -106,11 +106,11 @@ const createCommand = () => {
     });
 
     $("#requestInfo").on("click", () => {
-        requestInfo(user_account);
+        requestInfoInterface(user_account);
     });
 
     $("#requestInfo2").on("click", () => {
-        requestInfo(user_account);
+        requestInfoInterface(user_account);
     });
 };
 
@@ -250,6 +250,19 @@ const checkAuthorityInterface = () => {
     });
 };
 
+const requestInfoInterface = () => {
+    balanceOf(user_account).then((balance) => {
+        console.log(balance);
+        if (Number(balance) > 0) {
+            requestInfo(user_account);
+        } else if (Number(balance) === 0) {
+            output("あなたはまだトークンを持っていません。");
+        } else {
+            output("残高が不明な値です。");
+        }
+    });
+};
+
 const requestInfo = (owner) => {
     const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
     const data = {
@@ -272,7 +285,7 @@ const requestInfo = (owner) => {
         console.error(error);
     };
 
-    $.ajax(header).then(f, g);
+    return $.ajax(header).then(f, g);
 }
 
 const parseRSAKey = (keyJSON) => {
