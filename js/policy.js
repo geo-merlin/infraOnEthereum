@@ -3,93 +3,53 @@
 const createCommand = () => {
     $("#createToken").on("click", () => {
         const password = $("#password-input").val();
-        console.log(password);
-        if (password.length > 0) {
-            balanceOf(user_account).then((balance) => {
-                console.log(balance);
-                if (Number(balance) === 0) {
-                    $("#outputs").html("トークンが作成されるのを待機しています。");
-                    keyGen(password);
-                    const n = RSAKey.n.toString();
-                    const e = String(RSAKey.e);
-                    createToken(n, e).on("receipt", (result) => {
-                        console.log(result);
-                        $("#outputs").html("登録されたパスワードは" + password + "です。");
-                    }).on("error", (error) => {
-                        console.error(error);
-                        $("#outputs").html("トークンの作成に失敗しました。");
-                    });
-                } else if (Number(balance) > 0) {
-                    $("#outputs").html("あなたはすでにトークンを持っています。");
-                } else {
-                    $("#outputs").html("残高が不明な値です。");
-                }
-            }, (error) => {
-                console.error(error);
-                $("#outputs").html("残高の取得に失敗しました。");
-            });
-        } else {
-            $("#outputs").html("keyJSONを入力してください。");
-        }
+        createTokenInterface(password);
+    });
+
+    $("#createToken2").on("click", () => {
+        const password = $("#password-input2").val();
+        createTokenInterface(password);
     });
 
     $("#deleteToken").on("click", () => {
-        $("#outputs").html('<div id="allAuthority"></div><div id="publicKey"></div>');
+        output('<div id="allAuthority"></div><div id="publicKey"></div>');
         balanceOf(user_account).then((balance) => {
             console.log(balance);
             if (Number(balance) > 0) {
-                $("#outputs").html("トークンが削除されるのを待機しています。");
+                output("トークンが削除されるのを待機しています。");
                 deleteToken().on("receipt", (result) => {
                     console.log(result);
-                    $("#outputs").html("トークンの削除に成功しました。");
+                    output("トークンの削除に成功しました。");
                 }).on("error", (error) => {
                     console.error(error);
-                    $("#outputs").html("トークンの削除に失敗しました。");
+                    output("トークンの削除に失敗しました。");
                 });
             } else if (Number(balance) === 0) {
-                $("#outputs").html("あなたはまだトークンを持っていません。");
+                output("あなたはまだトークンを持っていません。");
             } else {
-                $("#outputs").html("残高が不明な値です。");
+                output("残高が不明な値です。");
             }
         }, (error) => {
             console.error(error);
-            $("#outputs").html("残高の取得に失敗しました。");
+            output("残高の取得に失敗しました。");
         });
     });
 
     $("#checkAuthority").on("click", () => {
-        balanceOf(user_account).then((balance) => {
-            console.log(balance);
-            if (Number(balance) > 0) {
-                checkAuthority(user_account).then((authority) => {
-                    console.log(authority);
-                    $("#outputs").html("<p>あなたが持っている権限は次のとおりです。<ul>"
-                    + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
-                    + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
-                    + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
-                    + "</ul></p>");
-                }, (error) => {
-                    console.error(error);
-                    $("#outputs").html("トークンの取得に失敗しました");
-                });
-            } else if (Number(balance) === 0) {
-                $("#outputs").html("あなたはまだトークンを持っていません。");
-            } else {
-                $("#outputs").html("残高が不明な値です。");
-            }
-        }, (error) => {
-            console.error(error);
-            $("#outputs").html("残高の取得に失敗しました。");
-        });
+        checkAuthorityInterface();
+    });
+
+    $("#checkAuthority2").on("click", () => {
+        checkAuthorityInterface();
     });
 
     $("#getTotalSupply").on("click", () => {
         getTotalSupply().then((result) => {
             console.log(result);
-            $("#outputs").html("ただいまのトークン総発行数は " + result + " 枚です。");
+            output("ただいまのトークン総発行数は " + result + " 枚です。");
         }, (error) => {
             console.error(error);
-            $("#outputs").html("総発光量の取得に失敗しました");
+            output("総発行量の取得に失敗しました");
         });
     });
 
@@ -99,20 +59,20 @@ const createCommand = () => {
         if (to_address) {
             ownership(user_account).then((token_id) => {
                 console.log(token_id);
-                $("#outputs").html("トークンが送金されるのを待機しています。");
+                output("トークンが送金されるのを待機しています。");
                 transfer(to_address, token_id).on("receipt", (result) => {
                     console.log(result);
-                    $("#outputs").html("トークンを " + to_address + " に送金しました。");
+                    output("トークンを " + to_address + " に送金しました。");
                 }).on("error", (error) => {
                     console.error(error);
-                    $("#outputs").html("トークンの送金に失敗しました。");
+                    output("トークンの送金に失敗しました。");
                 });
             }, (error) => {
                 console.error(error);
-                $("#outputs").html("あなたはトークンを持っていません。");
+                output("あなたはトークンを持っていません。");
             });
         } else {
-            $("#outputs").html("宛先を入力してください。");
+            output("宛先を入力してください。");
         }
     });
 
@@ -122,24 +82,32 @@ const createCommand = () => {
         if (password.length > 0) {
             ownership(user_account).then((token_id) => {
                 console.log(token_id);
-                $("#outputs").html("パスワードが変更されるのを待機しています。");
+                output("パスワードが変更されるのを待機しています。");
                 keyGen(password);
                 const n = RSAKey.n.toString();
                 const e = String(RSAKey.e);
                 keyReflesh(n, e).on("receipt", (result) => {
                     console.log(result);
-                    $("#outputs").html("<p>パスワードを" + password + "に変更しました。</p>");
+                    output("<p>パスワードを" + password + "に変更しました。</p>");
                 }).on("error", (error) => {
                     console.error(error);
-                    $("#outputs").html("パスワードの変更に失敗しました。");
+                    output("パスワードの変更に失敗しました。");
                 });
             }, (error) => {
                 console.error(error);
-                $("#outputs").html("あなたはトークンを持っていません。");
+                output("あなたはトークンを持っていません。");
             });
         } else {
-            $("#outputs").html("パスワードを入力してください。");
+            output("パスワードを入力してください。");
         }
+    });
+
+    $("#requestInfo").on("click", () => {
+        requestInfo(user_account);
+    });
+
+    $("#requestInfo2").on("click", () => {
+        requestInfo(user_account);
     });
 };
 
@@ -166,7 +134,7 @@ $(() => {
         createCommand();
     } else {
       console.error(error);
-      $("#outputs").html("アカウントが指定されていません。");
+      output("アカウントが指定されていません。");
     }
   });
 });
@@ -215,7 +183,70 @@ const keyReflesh = (public_key_n, public_key_e) => {
     return contract.methods.keyReflesh(public_key_n, public_key_e).send({from: user_account});
 };
 
-const requireInfo = (owner, file_name) => {
+const output = (html) => {
+    $(".output").each((i, e) => {
+        $(e).html(html);
+    });
+};
+
+const createTokenInterface = (password) => {
+    console.log(password);
+    if (password.length > 0) {
+        balanceOf(user_account).then((balance) => {
+            console.log(balance);
+            if (Number(balance) === 0) {
+                output("トークンが作成されるのを待機しています。");
+                keyGen(password);
+                const n = RSAKey.n.toString();
+                const e = String(RSAKey.e);
+                createToken(n, e).on("receipt", (result) => {
+                    console.log(result);
+                    output("登録されたパスワードは" + password + "です。");
+                }).on("error", (error) => {
+                    console.error(error);
+                    output("トークンの作成に失敗しました。");
+                });
+            } else if (Number(balance) > 0) {
+                output("あなたはすでにトークンを持っています。");
+            } else {
+                output("残高が不明な値です。");
+            }
+        }, (error) => {
+            console.error(error);
+            output("残高の取得に失敗しました。");
+        });
+    } else {
+        output("パスワードを入力してください。");
+    }
+};
+
+const checkAuthorityInterface = () => {
+    balanceOf(user_account).then((balance) => {
+        console.log(balance);
+        if (Number(balance) > 0) {
+            checkAuthority(user_account).then((authority) => {
+                console.log(authority);
+                output("<p>あなたが持っている権限は次のとおりです。<ul>"
+                    + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
+                    + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
+                    + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
+                    + "</ul></p>");
+            }, (error) => {
+                console.error(error);
+                output("トークンの取得に失敗しました");
+            });
+        } else if (Number(balance) === 0) {
+            output("あなたはまだトークンを持っていません。");
+        } else {
+            output("残高が不明な値です。");
+        }
+    }, (error) => {
+        console.error(error);
+        output("残高の取得に失敗しました。");
+    });
+};
+
+const requestInfo = (owner) => {
     const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
     const data = {
         owner: encodeURIComponent(owner)
@@ -231,7 +262,7 @@ const requireInfo = (owner, file_name) => {
         console.log(result);
         const signed_url = decrypt(result);
         console.log(signed_url);
-        //window.location.href = signed_url;
+        window.open(signed_url);
     };
     const g = (error) => {
         console.error(error);

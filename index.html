@@ -77,7 +77,7 @@
     </div>
 
     <script language="javascript" type="text/javascript" src="js/policy.js"></script>
-    <div id="outputs" class="output"></div>
+    <div class="output"></div>
     <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -187,20 +187,20 @@
               <h3><b>会社ごっこを始めよう</b></h3>
               <p>上の準備が終わったなら、このボタンを押して下さい！とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。</p>
               <div class="command">
-                  <button type="button" class="btn btn-primary">トークン作成</button>
-                  <input type="textbox" class="form-control" placeholder="パスワードを入力してください" />
+                  <button type="button" id="createToken2" class="btn btn-primary">トークン作成</button>
+                  <input type="textbox" id="password-input2" class="form-control" placeholder="パスワードを入力してください" />
               </div>
 　　　　　　　<br></br>
-              
+
               <br><p>つぎはこのボタンを押して少し待って下さい。</p>
               <div class="command">
-                  <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
+                  <button type="button" id="checkAuthority2" class="btn btn-secondary">所持トークン確認</button>
               </div>
               <div id="outputs" class="output"></div>
 　　　　　　　<br><p>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？</p>
 　　　　　　　<br></br>
 　　　　　　　<p>では会社に情報の開示を求めましょう。会社側はあなたのトークンの権限を元に、見せる情報を変えます。</p>
-              <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
+              <button type="button" id="requestInfo2" class="btn btn-secondary">情報開示</button>
               <br>
               <p>他にも、送金や他の人のトークンの確認などができます。後でご堪能あれ！</p>
 　　　　　　　<br></br>
@@ -217,7 +217,7 @@
               <br><p>このシステムはホンの始まりに過ぎません。先ほど１つのトークンに１つの公開鍵を追加することで可能性が大きく広がったことを伝えましたが、この連鎖・ネットが生み出す新しい世界をまだ誰も知りません。</p>
               <p>７２１の送信は、APIエコノミーにシェアリングをもたらし、世界中の企業を開放的でダイナミックな組織にするでしょう。もしかしたら、僕たちの会社情報トークンもどこかの取引所で売買されるようになるかもしれないのです。
               </p>
-             
+
               <p><br><b style="color:red;">僕たちはコードを公開します。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
             </div>
           </div>
