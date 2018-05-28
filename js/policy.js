@@ -84,8 +84,8 @@ const createCommand = () => {
                 console.log(token_id);
                 output("パスワードが変更されるのを待機しています。");
                 keyGen(password);
-                const n = RSAKey.n.toString();
-                const e = String(RSAKey.e);
+                const n = myRSAKey.n.toString();
+                const e = String(myRSAKey.e);
                 keyReflesh(n, e).on("receipt", (result) => {
                     console.log(result);
                     output("<p>パスワードを" + password + "に変更しました。</p>");
@@ -113,7 +113,7 @@ const createCommand = () => {
 
 $(() => {
   try {
-    window.RSAKey = parseRSAKey(JSON.parse(localStorage.getItem("RSAKey")));
+    window.myRSAKey = parseRSAKey(JSON.parse(localStorage.getItem("RSAKey")));
   } catch (e) {
     console.log("RSAキーが取得できません。");
   }
@@ -197,8 +197,8 @@ const createTokenInterface = (password) => {
             if (Number(balance) === 0) {
                 output("トークンが作成されるのを待機しています。");
                 keyGen(password);
-                const n = RSAKey.n.toString();
-                const e = String(RSAKey.e);
+                const n = myRSAKey.n.toString();
+                const e = String(myRSAKey.e);
                 createToken(n, e).on("receipt", (result) => {
                     console.log(result);
                     output("登録されたパスワードは" + password + "です。");
@@ -302,8 +302,9 @@ const stringifyRSAKey = (RSAKey) => {
 };
 
 const keyGen = (pass) => {
-    window.RSAKey = cryptico.generateRSAKey(pass, 1024);
-    localStorage.setItem("RSAKey", stringifyRSAKey(RSAKey));
+    console.log(pass);
+    window.myRSAKey = cryptico.generateRSAKey(pass, 1024);
+    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
 };
 
 const popUpKeygen = () => {
@@ -311,13 +312,13 @@ const popUpKeygen = () => {
 };
 
 const decrypt = (m_list) => {
-    if (!window.RSAKey) {
+    if (!window.myRSAKey) {
         popUpKeygen();
     }
 
     let result_url = "";
-    const big_d = RSAKey.d;
-    const big_n = RSAKey.n;
+    const big_d = myRSAKey.d;
+    const big_n = myRSAKey.n;
 
     m_list.forEach((m) => {
         const big_m = new BigInteger(String(m));
