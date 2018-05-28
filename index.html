@@ -22,6 +22,9 @@
         display: inline !important;
         width: auto !important;
       }
+      .btn-command{
+          min-width: 140px;
+      }
     </style>
   </head>
   <body>
@@ -50,25 +53,28 @@
                 <br><br>
                 <h3 class="chapter bg-warning">分散社内システムを使ってみよう</h3>
                 <div class="command">
-                  <button type="button" id="createToken" class="btn btn-primary">トークン作成</button>
+                  <button type="button" id="createToken" class="btn btn-primary btn-command">トークン作成</button>
                   <input type="textbox" id="password-input" class="form-control" placeholder="パスワードを入力してください" />
                 </div>
                 <div class="command">
-                  <button type="button" id="deleteToken" class="btn btn-primary">トークン削除</button>
+                  <button type="button" id="deleteToken" class="btn btn-primary btn-command">トークン削除</button>
                 </div>
                 <div class="command">
-                  <button type="button" id="checkAuthority" class="btn btn-secondary">所持トークン確認</button>
+                  <button type="button" id="checkAuthority" class="btn btn-info btn-command">所持トークン確認</button>
                 </div>
                 <div class="command">
-                  <button type="button" id="getTotalSupply" class="btn btn-secondary">総発行数</button>
+                  <button type="button" id="getTotalSupply" class="btn btn-info btn-command">総発行数</button>
                 </div>
                 <div class="command">
-                  <button type="button" id="transfer" class="btn btn-primary">トークン送金</button>
+                  <button type="button" id="transfer" class="btn btn-primary btn-command">トークン送金</button>
                   <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
                 </div>
                 <div class="command">
-                  <button type="button" id="changePublicKey" class="btn btn-primary">公開鍵変更</button>
+                  <button type="button" id="changePublicKey" class="btn btn-primary btn-command">公開鍵変更</button>
                   <input type="textbox" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" />
+                </div>
+                <div class="command">
+                  <button type="button" id="requestInfo" class="btn btn-info btn-command">情報開示</button>
                 </div>
             </div>
             <div class="col-xs-2 col-sm-2 col-lg-2">
@@ -198,7 +204,7 @@
               <div class="command">
                   <button type="button" id="checkAuthority2" class="btn btn-secondary">所持トークン確認</button>
               </div>
-              <div id="outputs" class="output"></div>
+              <div class="output"></div>
 　　　　　　　<br><p>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？</p>
 　　　　　　　<br></br>
 　　　　　　　<p>では会社に情報の開示を求めましょう。会社側はあなたのトークンの権限を元に、見せる情報を変えます。</p>
@@ -277,7 +283,6 @@
     </div><!-- #myModal -->
 
     <script>
-
       var last=1;
       var fontLarge=function(){$("p").css("fontSize",18);}
       var pop = function(num){showModal("#modal"+num);last=num;}
@@ -291,12 +296,18 @@
               $("body").addClass("modal-open"); //スクロールのフォーカスをモーダルに移す
               $(modal_name).off("hidden.bs.modal");
               modal_stack.pop();
+              if (modal_stack.length === 0) {
+                $("body").removeClass("modal-open"); //スクロールのフォーカスをbodyに移す
+              }
             });
             modal_stack.push(modal_name);
             //console.log("modal_stack =", modal_stack);
             $(modal_name).modal("show");
           } else {
             $(modal_stack.pop()).modal("hide");
+            if (modal_stack.length === 0) {
+              $("body").removeClass("modal-open"); //スクロールのフォーカスをbodyに移す
+            }
           }
         };
       })();
