@@ -1,15 +1,16 @@
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <title>会社をイーサリアム化した話</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script language="javascript" type="text/javascript" src="js/web3.min.js"></script>
+    <script type="text/javascript" src="js/web3.min.js"></script>
     <!--script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script-->
-    <script language="javascript" type="text/javascript" src="js/cryptico.js"></script>
-    <script language="javascript" type="text/javascript" src="js/contractABI.js"></script>
+    <script type="text/javascript" src="js/cryptico.js"></script>
+    <script type="text/javascript" src="js/contractABI.js"></script>
     <style>
     .navbar-default {
         background-color: #65baad;
@@ -76,32 +77,31 @@
       </div>
     </nav>
     <div id="home-page" class="container content">
-        <div class="row" style="margin-bottom: 10px;margin-top:40px;">
-            <div class="col-xs-2 col-sm-2 col-lg-2">
-            </div>
-            <div class="col-xs-8 col-sm-8 col-lg-8">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-xs-0 col-sm-2 col-lg-2"></div>
+            <div class="col-xs-12 col-sm-8 col-lg-8">
               <div id="commands" style="margin: 10px;">
                 <div>
                     <h3 class="chapter bg-warning">会社をイーサリアム化した話</h3>
-                      <p>あるいは次のクラウドの話</p>
+                    <p>あるいは次のクラウドの話</p>
                     <h4 class="chapter">第１章　<br>〜社内システムにようこそ〜</h4>
-                      <p></p>
-                      <button type="button" class="btn btn-success" onclick="pop(1);">POP</button>
+                    <p></p>
+                    <button type="button" class="btn btn-success" onclick="pop(1);">POP</button>
                     <h4 class="chapter">第２章　<br>〜鍵付きERC７２１〜</h4>
-                      <p></p>
-                      <button type="button" class="btn btn-success" onclick="pop(2);">POP</button>
+                    <p></p>
+                    <button type="button" class="btn btn-success" onclick="pop(2);">POP</button>
                     <h4 class="chapter">第３章　<br>〜テストネットで会社ごっこ〜</h4>
-                      <p></p>
-                      <button type="button" class="btn btn-success" onclick="pop(3);">POP</button>
+                    <p></p>
+                    <button type="button" class="btn btn-success" onclick="pop(3);">POP</button>
                     <h4 class="chapter">第４章　<br>〜コミュニティにようこそ〜</h4>
-                      <p></p>
-                      <button type="button" class="btn btn-success" onclick="pop(4);">POP</button>
+                    <p></p>
+                    <button type="button" class="btn btn-success" onclick="pop(4);">POP</button>
                 </div>
                 <br><br>
                 <h3 class="chapter bg-warning">分散社内システムを使ってみよう</h3>
                 <div class="command">
                   <button type="button" id="createToken" class="btn btn-primary btn-command">トークン作成</button>
-                  <input type="textbox" id="password-input" class="form-control" placeholder="パスワードを入力してください" />
+                  <input type="text" id="password-input" class="form-control" placeholder="パスワードを入力してください" value="" />
                 </div>
                 <div class="command">
                   <button type="button" id="deleteToken" class="btn btn-primary btn-command">トークン削除</button>
@@ -114,11 +114,11 @@
                 </div>
                 <div class="command">
                   <button type="button" id="transfer" class="btn btn-primary btn-command">トークン送金</button>
-                  <input type="textbox" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" />
+                  <input type="text" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" value="" />
                 </div>
                 <div class="command">
                   <button type="button" id="changePublicKey" class="btn btn-primary btn-command">公開鍵変更</button>
-                  <input type="textbox" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" />
+                  <input type="text" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" value="" />
                 </div>
                 <div class="command">
                   <button type="button" id="requestInfo" class="btn btn-info btn-command">情報開示</button>
@@ -128,31 +128,30 @@
                 <h3 class="chapter bg-warning">関連項目</h3>
                 <p><a href="./erc721.html">ERC７２１トークンがエンジニア全員に与えるインパクト</a></p>
                 <p><a href="https:/www.geomerlin.com">分散シンクタンクじおまーりん</a></p>
+              </div>
             </div>
-            <div class="col-xs-2 col-sm-2 col-lg-2">
-            </div>
+            <div class="col-xs-0 col-sm-2 col-lg-2"></div>
         </div>
     </div>
 
-    <script language="javascript" type="text/javascript" src="js/policy.js"></script>
-    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> 会社をイーサリアム化した話</h1>
-            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
-            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();"><p>文字を大きく</p></button>
+            <span class="modal-title" style="float:left;color:blue;font-size:36px;"> 会社をイーサリアム化した話</span>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">X</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
           </div>
-          <div class="modal-body" id="the_modal_content">
+          <div class="modal-body the-modal-content">
 　　　　　  <div>
-              <p>yeiyeiどうも。この実験に興味を持って頂き嬉しいです。これは組織を「イーサリアム化」する手法の提案です。</p>
+              <p>どうも。この実験に興味を持って頂き嬉しいです。これは組織を「イーサリアム化」する手法の提案です。</p>
 　　　　　　　<br></br>
               <br><p>イーサリアムはウェブ上での契約が行える「<b>スマートコントラクト</b>」という機能を持ちます。</p>
               <br><p>つまり、<b>知らない人同士が破られない約束をできる</b>性質を利用して様々なことを行えます。</p>
               <br><p>今回は、人をアクセスレベルに応じて違う情報にアクセスしてもらうシステムを作りました。誰でも使えるほど暗号学的にシンプルかつ強い拡張性を持つ方法ですので、是非ナカミを知って下さい。</p>
               <br><p>今回の実験で分かったことは、この手法によって次のようなことができることです。</p>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/before2.jpg" width="100%"></img>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/after.jpg" width="100%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/before2.jpg" width="100%" alt="" />
+              <img src="https://d1akgkukuzijsp.cloudfront.net/after.jpg" width="100%" alt="" />
               <br><br>
               <p>つまり<b>クラウドの中で重要な部分をイーサリアムに移し変えるだけ</b>です。<br>この「シンプル化」の技術により組織を管理するクラウドは次の効果を受けます。
                 <br><br><b>①　SE業務の簡略化</b>
@@ -167,44 +166,43 @@
               <p>このシステムの中核をに担うのは、この世に一つしかないデジタルデータを作るERC７２１という仕組みです。</p>
               <br><p>これはデータとしては仮想通貨の延長です。仮想通貨システムに１円玉を作り、番号と名前を書けるようにしたらどうなるか考えてみましょう。</p>
               <p>それは人に渡すこともできますが、番号と名前が書いてあるので、他と区別することができます。つまり、あなたのスマフォや服のように、モノとして扱えるので、使用と売買ができます。<b>”実物”が仮想世界に生まれた</b>と考えてください。この"実物"をERC７２１トークンと呼びます。</p>
-　　　　　　　<br></br>
+　　　　　　　<br>
               <br><p>この発明品を少し工夫して利用すると、さらに多くの機能を作ることができます。</p>
 　　　　　　　<br><p>この「１円玉」に鍵をつけるのです。</p>
-              </p>
-　　　　　　　<br></br>
+　　　　　　　<br>
               <h3><b>ERC７２１に公開鍵をつける</b></h3>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0044.JPG" width="100%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0044.JPG" width="100%" alt="" />
               <p>人を持っているERC７２１トークンに応じて区別したいと考えます。この時、そのトークンは所有物ですので、持っている人だけが好きなタイミングで公開鍵を全員に見えるように書いておくことができます。</p>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0045.JPG" width="100%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0045.JPG" width="100%" alt="" />
               <p>色々なシステムはこの公開鍵にアクセスしてデータを暗号化して返えすだけでセキュリティと権限の問題はバッチリです。どうせ本物の所有者だけが秘密鍵を持っていて暗号を解いてナカミを見ることができるのですから。</p>
               <p><br><b style="color:red;">この鍵つきトークンは、コピー可能な従来の秘密鍵と違い、本物の鍵のように扱えます。</b>詳細を次のページで見ていきましょう。</p>
             </div>
           </div>
-          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="loader loader-4" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="next();">NEXT</button>
           </div>
         </div>
       </div>
-    </div><!-- #myModal -->
-    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> 鍵付きERC７２１</h1>
-            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <span class="modal-title" style="float:left;color:blue;font-size:36px;"> 鍵付きERC７２１</span>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">X</button>
             <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
           </div>
-          <div class="modal-body" id="the_modal_content">
+          <div class="modal-body the-modal-content">
 　　　　　  <div>
               <p>ではこのトークン仕様何が嬉しいのでしょうか?
-　　　　　　　<br></br>
+　　　　　　　<br>
               <br></p>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0047.JPG" width="100%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0047.JPG" width="100%" alt="" />
               <h3><b>パスワード変更</b></h3>
               <p>まず、このパスワード（公開鍵）なんですが、当然トークンの持ち主は好きな時に勝手に変えることができます。公開鍵を変える関数をコントラクトにつけてあるので、トランザクションと一緒に公開鍵を送れば良いだけです。</p>
-              <br><p>ペアの秘密鍵を自分のパソコンに保存する必要がありますが、<b>紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。</b></p>
+              <br><p>パスワードやペアの秘密鍵は<b>紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。</b></p>
               <br><p>パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。</p>
 　　　　　　　<br></br>
               </p>
@@ -216,7 +214,7 @@
               <p>次のページで実際に僕たちの作ったトークンを使ってみましょう。</p>
             </div>
           </div>
-          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="loader loader-4" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
@@ -224,32 +222,32 @@
           </div>
         </div>
       </div>
-    </div><!-- #myModal -->
-    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> テストネットで会社ごっこ</h1>
-            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <span class="modal-title" style="float:left;color:blue;font-size:36px;"> テストネットで会社ごっこ</span>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">X</button>
             <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
           </div>
-          <div class="modal-body" id="the_modal_content">
+          <div class="modal-body the-modal-content">
 　　　　　  <div>
               <p>まず、今パソコンでお使いのブラウザにMetamaskが入っていないならインストールしましょう。</p>
               <br><p>この方のページを参考にして下さい。（スマホには現在対応していません）</p>
               <a href="https://coin-textbook.com/metamask/">MetaMask（メタマスク）の使い方：ウォレット作成や送金方法を解説</a>
-              <br></br>
+              <br>
               <p>Metamaskの一番上にある文字が「MainNet」ではなく、「<b style="color:red;">Reopsten</b>」になっていることを確認して下さい。</p>
               <p><br>「BUY」を押し、「FAUCET」を「Request」して下さい。しばらく待つと１ETHが降ってきます。</p>
-　　　　　　　<br></br>
+　　　　　　　<br>
               <br>
               <h3><b>会社ごっこを始めよう</b></h3>
-              <p>上の準備が終わったなら、このボタンを押して下さい！とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。これから使うパスワードも忘れずに！</p>
+              <p>上の準備が終わったなら、このボタンを押して下さい！とりあえず僕たちの会社の擬似トークンをテストネットで発行してみました。これは遊びなので好きな権限をつけることができます。これから使うパスワードも忘れずに！<b>このパスワードを元に公開鍵と秘密鍵を作ります。</b></p>
               <div class="command">
                   <button type="button" id="createToken2" class="btn btn-primary">トークン作成</button>
-                  <input type="textbox" id="password-input2" class="form-control" placeholder="パスワードを入力してください" />
+                  <input type="text" id="password-input2" class="form-control" placeholder="パスワードを入力してください" value="" />
               </div>
-　　　　　　　<br></br>
+　　　　　　　<br>
 
               <br><p>つぎはこのボタンを押して少し待って下さい。</p>
               <div class="command">
@@ -257,7 +255,7 @@
               </div>
               <div class="output"></div>
 　　　　　　　<br><p>イーサリアムの最新ブロックからあなたの情報をとってきます。どうです？株主になれていますか？</p>
-　　　　　　　<br></br>
+　　　　　　　<br>
 　　　　　　　<p>では会社に情報の開示を求めましょう。会社側はあなたのトークンの権限を元に、見せる情報を変えます。</p>
               <br><p>今回は、署名付きURLを先ほどあなたがトークンに書き込んだ公開鍵で暗号化して送ってもらいます。</p>
               <br><p>暗号化に加え、時間制限がつくため、これが最もセキュリティの高い方法でしょう。</p>
@@ -267,7 +265,7 @@
               </div>
               <div class="output"></div>
               <p>他にも、送金や他の人のトークンの確認などができます。後でご堪能あれ！</p>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/shutterstock_561819103.jpg" width="60%"></img>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/shutterstock_561819103.jpg" width="60%" alt="" />
               <h3><b>これ作るの大変だった？</b></h3>
               <p>実は全く大変ではありませんでした。Solidityの200行のコードがブロックチェーンで動き、残りはJSとPythonで300行くらいです。</p>
               <br><p>なぜこんなに苦労しないのかと言えば、設計がシンプルだからです。</p>
@@ -284,7 +282,7 @@
               <p><br><b style="color:red;">僕たちはコードを公開します。</b><b>次のページで、文理・分野を問わない僕たちのコミュニテイにサクッと入りましょう。</b></p>
             </div>
           </div>
-          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="loader loader-4" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
@@ -292,33 +290,33 @@
           </div>
         </div>
       </div>
-    </div><!-- #myModal -->
+    </div>
 
-    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> コミュニテイにようこそ</h1>
-            <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
+            <span class="modal-title" style="float:left;color:blue;font-size:36px;"> コミュニテイにようこそ</span>
+            <button type="button" class="btn " data-dismiss="modal" style="float:right;">X</button>
             <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
           </div>
-          <div class="modal-body" id="the_modal_content">
+          <div class="modal-body the-modal-content">
 　　　　　  <div>
               <p>このコミュニティはイーサリアムを使った組織運営を増やすためのコミュニティです。まずはERC７２１の面白い使い方について今回実験したもの以上のことをみんなで考えます。
-　　　　　　　<br></br>
-              <br>トークンエコノミーに関する交流と議論、遊びとコーディングに面白い人たちが惹かれるだけで、何年かの社会の雰囲気と気分はめでたいものになると確信しています。こんな変な文章をここまで読んでくれたあなたは面白い人に決まっているのですぐに入ってもらいたい！<br></br></p>
-              <img src="https://d1akgkukuzijsp.cloudfront.net/geomerlin.jpg" width="50%"></img>
+　　　　　　　<br>
+              <br>トークンエコノミーに関する交流と議論、遊びとコーディングに面白い人たちが惹かれるだけで、何年かの社会の雰囲気と気分はめでたいものになると確信しています。こんな変な文章をここまで読んでくれたあなたは面白い人に決まっているのですぐに入ってもらいたい！<br></p>
+              <img src="https://d1akgkukuzijsp.cloudfront.net/geomerlin.jpg" width="50%" alt="" />
               <h3><b>Twitter</b></h3>
               <p><a href="https://twitter.com/geomerlin_">このアカウント</a>をフォローし、「<b>#読んだ</b>」が入った文章でリプライを送ってくれたら、<a>このリスト</a>に加えます。このリストにいることはメンバーである証になります。
-　　　　　　　<br></br>
+　　　　　　　<br>
               </p>
-　　　　　　　<br></br>
+　　　　　　　<br>
               <h3><b>Slack</b></h3>
               <p><a href="https://join.slack.com/t/geomarlin/shared_invite/enQtMzYyNTQ1MjEyNjYwLWRiNTY0M2NiYjFmYTYwMzMzMmRiNTMyOTE4MWZlNzg5YjJmOTdiNTI1ODJiNGI5NWY2ZTJjZWEwZTFkYzFmMzY">このリンク</a>からSlackに入ってください。情報が一番多く投下されるのはここになるでしょう。ここのメンバーであることもコミュニティのメンバーであることの証になります</p>
               <h3><b>Github</b></h3>
 　　　　　　　<br><p><a href="https://github.com/geo-merlin/infraOnEthereum">infraOnEthereum</a></p>
               <p>ここのコードがブロックチェーンに関わる部分です。わからない部分あったらSlackでどうぞ^^</p>
-              <br></br>
+              <br>
               <h3>開発者と仲良くなろう</h3>
               <br><p><a href="https://twitter.com/leo_hio"><b style="color:blue;">極度消耗(しなさい)</b></a></p>
               <p><br>機械と投資が好きな人。歩きまわる癖があるので、歩いて楽しい京都に住んでいる。ボードゲームに熱狂しがちなのであんまり誘わないでほしい^^<p>
@@ -326,17 +324,18 @@
               <p><br>数学科在籍のプログラマー。勝手に紹介すると、合気道に熱心な体育会出身のエンジニア。これだけ仮想通貨のコードをいじっているのに、値段を気にした瞬間すらない不思議な人。</p>
             </div>
           </div>
-          <div class="loader loader-4" id="loading2" style="display: none;"></div>
+          <div class="loader loader-4" style="display: none;"></div>
           <div class="modal-footer">
             <button type="button" class="btn " data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
           </div>
         </div>
       </div>
-    </div><!-- #myModal -->
+    </div>
 
     <script>
-    var modal_stack = [];
+      var is_pc = $(window).width() > $(window).height();
+      var modal_stack = [];
       var last=1;
       var fontbig=false;
       var fontLarge=function(){if(fontbig){$("p").css("fontSize",24);return false;};$("p").css("fontSize",18);fontbig=true;}
@@ -372,6 +371,7 @@
       fontLarge();
 
     </script>
+    <script type="text/javascript" src="js/policy.js"></script>
 
   </body>
 </html>
