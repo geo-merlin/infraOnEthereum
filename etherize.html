@@ -1,6 +1,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <title>会社をイーサリアム化した話</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -8,6 +9,26 @@
     <!--script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script-->
     <script language="javascript" type="text/javascript" src="js/cryptico.js"></script>
     <script language="javascript" type="text/javascript" src="js/contractABI.js"></script>
+    <style>
+    .navbar-default {
+        background-color: #65baad;
+        border-color: #3e6962;
+    }
+    .navbar-default .navbar-brand {
+        color: #ffffff;
+    }
+    </style>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105834787-1', 'auto');
+  ga('send', 'pageview');
+
+    </script>
+
     <style>
       .command{
         margin: 5px;
@@ -29,6 +50,30 @@
     </style>
   </head>
   <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.geomerlin.com">Geomerlin Systems</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div class="navbar-form navbar-right" id='ac-form'>
+            <div class="form-group">
+            <span id='user-name' >ようこそ  </span>
+            </div>
+            <div class="form-group" id='head-buttons'>
+              <button class="btn btn-primary" id ='signin-btn' onclick='newTab("https://www.geomerlin.com")'>Sign in</button>
+              <button class="btn btn-default" id='signup-btn'onclick='newTab("https://www.geomerlin.com")'>Sing up</button>
+            </div>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
     <div id="home-page" class="container content">
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-xs-2 col-sm-2 col-lg-2">
@@ -78,6 +123,10 @@
                   <button type="button" id="requestInfo" class="btn btn-info btn-command">情報開示</button>
                 </div>
                 <div class="output"></div>
+                <br></br>
+                <h3 class="chapter bg-warning">関連項目</h3>
+                <p><a href="./erc721.html">ERC７２１トークンがエンジニア全員に与えるインパクト</a></p>
+                <p><a href="https:/www.geomerlin.com">分散シンクタンクじおまーりん</a></p>
             </div>
             <div class="col-xs-2 col-sm-2 col-lg-2">
             </div>
@@ -112,6 +161,7 @@
                 <br><br><b>③　協業の準備が完了 </b>
                   <br>イーサリアムをメインネットで使うということは、世界中の分散アプリケーションと協業の可能性が生まれるということです。また、透明性が生まれることも協業の重要なファクターとなります。
               </p>
+              <br>
               <h3><b>ERC７２１</b></h3>
               <p>このシステムの中核をに担うのは、この世に一つしかないデジタルデータを作るERC７２１という仕組みです。</p>
               <br><p>これはデータとしては仮想通貨の延長です。仮想通貨システムに１円玉を作り、番号と名前を書けるようにしたらどうなるか考えてみましょう。</p>
