@@ -135,12 +135,12 @@
 
     <script language="javascript" type="text/javascript" src="js/policy.js"></script>
     <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 id="modaltitle" color="blue" style="float:left;"> 社内システムにようこそ</h1>
+            <h1 id="modaltitle" color="blue" style="float:left;"> 会社をイーサリアム化した話</h1>
             <button type="button" class="btn " data-dismiss="modal" style="float:right;">×</button>
-            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();">文字を大きく</button>
+            <button type="button" class="btn btn-danger" style="float:right;" onclick="fontLarge();"><p>文字を大きく</p></button>
           </div>
           <div class="modal-body" id="the_modal_content">
 　　　　　  <div>
@@ -203,15 +203,15 @@
               <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0047.JPG" width="100%"></img>
               <h3><b>パスワード変更</b></h3>
               <p>まず、このパスワード（公開鍵）なんですが、当然トークンの持ち主は好きな時に勝手に変えることができます。公開鍵を変える関数をコントラクトにつけてあるので、トランザクションと一緒に公開鍵を送れば良いだけです。</p>
-              <p>ペアの秘密鍵を自分のパソコンに保存する必要がありますが、紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。</p>
-              <p>パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。</p>
+              <br><p>ペアの秘密鍵を自分のパソコンに保存する必要がありますが、<b>紛失してもまたいつでも変えられます。メールの確認もリンクのクリックも何も他に要りません。</b></p>
+              <br><p>パスワードリセットがこんなにも簡単なのはブロックチェーンの優位性の一つの証拠でしょう。</p>
 　　　　　　　<br></br>
               </p>
 　　　　　　　<br></br>
               <h3><b>譲渡</b></h3>
               <p>前のページで伝えたとおり、送金（送信）可能です。パスワードはそのままでも問題ありません。秘密鍵さえ教えなければ相手にとって意味はありませんし、受け取った相手は最初にパスワードを変更することから始めるでしょう。</p>
-　　　　　　　<p>普通のパスワード・秘密鍵であれば、相手に教えても自分がコピーを持てるので相手の利益は少なかったりしますが、この鍵付きトークンであれば送り主はそのうち使えなくなるので、より現実の鍵に近づいたと言えるでしょう。</p>
-              <p><br><b style="color:red;">これは株券に実用機能をつけることや、ウェブ上の組織を構築することなど</b>、僕の想像できるだけでもユースケースが沢山あります。</p><p>そして会社をイーサリアム化する根幹機能となるでしょう。</p>
+　　　　　　　<br><p>普通のパスワード・秘密鍵であれば、相手に教えても自分がコピーを持てるので相手の利益は少なかったりしますが、この鍵付きトークンであれば送り主はそのうち使えなくなるので、より現実の鍵に近づいたと言えるでしょう。</p>
+              <br><p><br><b style="color:red;">これは株券に実用機能をつけることや、ウェブ上の組織を構築することなど</b>、僕の想像できるだけでもユースケースが沢山あります。</p><p>そして会社をイーサリアム化する根幹機能となるでしょう。</p>
               <p>次のページで実際に僕たちの作ったトークンを使ってみましょう。</p>
             </div>
           </div>
@@ -338,7 +338,7 @@
     var modal_stack = [];
       var last=1;
       var fontbig=false;
-      var fontLarge=function(){if(fontbig){alert("もう文字は大きいです");return false;};$("p").css("fontSize",18);fontbig=true;}
+      var fontLarge=function(){if(fontbig){$("p").css("fontSize",24);return false;};$("p").css("fontSize",18);fontbig=true;}
       var pop = function(num){showModal("#modal"+num);last=num;}
       var next = function(){showModal();setTimeout(() => {pop(last+1);}, 500);}
       var back = function(){showModal();setTimeout(() => {pop(last-1);}, 500);}
@@ -368,7 +368,7 @@
         };
       })();
       showModal("#modal1");
-      if(is_pc){fontLarge();};
+      fontLarge();
 
     </script>
 
