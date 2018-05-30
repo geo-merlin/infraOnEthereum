@@ -249,9 +249,11 @@ const checkAuthorityInterface = () => {
 };
 
 const requestInfoInterface = () => {
+    output("残高を取得していまふ。");
     balanceOf(user_account).then((balance) => {
         console.log(balance);
         if (Number(balance) > 0) {
+            output("暗号化されたデータを解読中です。");
             requestInfo(user_account);
         } else if (Number(balance) === 0) {
             output("あなたはまだトークンを持っていません。");
