@@ -280,6 +280,7 @@ const requestInfo = (owner) => {
         const signed_url = decrypt(result);
         console.log(signed_url);
         window.open(signed_url);
+        output("データが取得できました。新しい画面が開いて中身を確認できるはずです。");
     };
     const g = (error) => {
         console.error(error);
