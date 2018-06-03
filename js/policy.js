@@ -1,12 +1,38 @@
 "use strict";
 
+let myRSAKey;
+let web3js;
+let contract;
+let methods;
+let user_account;
+let ownership_token_ids;
+let current_token_id;
 const user_account1 = "0xE30B340A0B6c94EcA7B52bE912827811c04821A1";
 const user_account2 = "0x2093bf5d91568C466b6e989eC4F441d90fA1c048";
+const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3node";
+
+const output = (html) => {
+    $(".output").each((i, e) => {
+        $(e).html(html);
+    });
+};
+
 const createCommand = () => {
-    /*$("#createToken").on("click", () => {
-        const password = $("#password-input").val();
-        createTokenInterface(password);
-    });*/
+    $("#createToken").on("click", () => {
+        const f = (result) => {
+            console.log(result);
+            const hash = (result) ? result : "nothing"
+            output("<p>申請が成功しました。約1分後に所持トークンを確認してみてください。作成が確認できたらパスワードを設定してください。</p>"
+            + "<p>Transaction hash is " + hash + ".</p>");
+        };
+        const g = (error) => {
+            console.error(error);
+            output("申請に失敗しました。");
+        };
+
+        output("トークンを申請しています。申請の結果が返ってくるまでに約1分かかります。");
+        createApprove(user_account).then(f, g);
+    });
 
     $("#deleteToken").on("click", () => {
         output('<div id="allAuthority"></div><div id="publicKey"></div>');
@@ -33,7 +59,29 @@ const createCommand = () => {
     });
 
     $("#checkAuthority").on("click", () => {
-        checkAuthorityInterface();
+        ownership(user_account).then((token_ids) => {
+            console.log(token_ids);
+            if (token_ids.length === 0) {
+                output("あなたはいまトークンを所持していません。");
+            } else if (token_ids.indexOf(current_token_id) > -1) {
+                checkAuthority(current_token_id).then((authority) => {
+                    console.log(authority);
+                    output("<p>あなたが持っている権限は次のとおりです。<ul>"
+                        + "<li>国の管理権限：" + (authority.indexOf(1) ? "あり" : "なし") + "</li>"
+                        + "<li>株の所有：" + (authority.indexOf(2) ? "あり" : "なし") + "</li>"
+                        + "<li>会社権限：" + (authority.indexOf(3) ? "あり" : "なし") + "</li>"
+                        + "</ul></p>");
+                }, (error) => {
+                    console.error(error);
+                    output("トークンの取得に失敗しました");
+                });
+            } else {
+                output("あなたはいまトークン(ID: " + current_token_id + ")を所持していません。");
+            }
+        }, (error) => {
+            console.error(error);
+            output("残高の取得に失敗しました。");
+        });
     });
 
 
@@ -80,7 +128,7 @@ const createCommand = () => {
                 console.log(token_ids);
                 if (token_ids.indexOf(current_token_id) > -1) {
                     output("パスワードが変更されるのを待機しています。");
-                    keyGen(password);
+                    myRSAKey = keyGen(password);
                     const n = myRSAKey.n.toString();
                     const e = myRSAKey.e;
                     refleshPublicKey(current_token_id, n, e).on("receipt", (result) => {
@@ -102,86 +150,145 @@ const createCommand = () => {
     });
 
     $("#requestInfo").on("click", () => {
-        requestInfoInterface(user_account);
-    });
-};
-
-const createTokenInterface = (password) => {
-    console.log(password);
-    if (password.length > 0) {
+        output("残高を取得しています。");
         balanceOf(user_account).then((balance) => {
             console.log(balance);
-            if (Number(balance) === 0) {
-                output("トークンが作成されるのを待機しています。");
-                keyGen(password);
-                const n = myRSAKey.n.toString();
-                const e = myRSAKey.e;
-                createToken(n, e).on("receipt", (result) => {
+            if (Number(balance) > 0) {
+                const f = (result) => {
                     console.log(result);
-                    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
-                    output("登録されたパスワードは" + password + "です。");
-                }).on("error", (error) => {
+                    const signed_url = decrypt(result);
+                    console.log(signed_url);
+                    window.open(signed_url);
+                    output("データが取得できました。新しい画面が開いて中身を確認できるはずです。");
+                };
+                const g = (error) => {
                     console.error(error);
-                    output("トークンの作成に失敗しました。");
-                });
-            } else if (Number(balance) > 0) {
-                output("あなたはすでにトークンを持っています。");
+                    output("データが取得できませんでした。");
+                };
+
+                output("暗号化されたデータを解読中です。");
+                requestInfo(user_account).then(f, g);
+            } else if (Number(balance) === 0) {
+                output("あなたはまだトークンを持っていません。");
             } else {
                 output("残高が不明な値です。");
             }
-        }, (error) => {
-            console.error(error);
-            output("残高の取得に失敗しました。");
         });
-    } else {
-        output("パスワードを入力してください。");
+    });
+};
+
+const getTotalSupply = () => methods.getTotalSupply().call();
+const balanceOf = (owner) => methods.balanceOf(owner).call();
+const ownership = (owner) => methods.ownership(owner).call();
+const ownerOf = (token_id) => methods.ownerOf(token_id).call();
+const transfer = (to, token_id) => methods.transfer(to, token_id).send({from: user_account});
+const approve = (to, token_id) => methods.approve(to, token_id).send({from: user_account});
+const takeOwnership = (token_id) => methods.takeOwnership(token_id).send({from: user_account});
+const createToken = (approver, authority, administer) => methods.createToken(approver, authority, administer).send({from: user_account});
+const deleteToken = (token_id) => methods.deleteToken(token_id).send({from: user_account});
+const addAdminister = (token_id, administers) => methods.addAdminister(token_id, administers).send({from: user_account});
+const changeAdminister = (token_id, administers) => methods.changeAdminister(token_id, administers).send({from: user_account});
+const addAuthority = (token_id, authority) => methods.addAuthority(token_id, authority).send({from: user_account});
+const changeAuthority = (token_id, changeAuthority) => methods.changeAdminister(token_id, authority).send({from: user_account});
+const checkAuthority = (token_id) => methods.checkAuthority(token_id).call();
+const checkAdministers = (token_id) => methods.checkAdministers(token_id).call();
+const checkPublicKey = (token_id) => methods.checkPublicKey(token_id).call();
+const refleshPublicKey = (token_id, n_of_public_key, e_of_public_key) => methods.refleshPublicKey(token_id, n_of_public_key, e_of_public_key).send({from: user_account});
+
+const createApprove = (owner) => {
+    const data = {
+        claimant: encodeURIComponent(owner),
+        name: "create"
+    };
+    const header = {
+        url: api_url,
+        type: "GET",
+        dataType: "json",
+        cache: false,
+        data: data
+    };
+
+    return $.ajax(header);
+}
+
+const requestInfo = (owner) => {
+    const data = {
+        claimant: encodeURIComponent(owner),
+        name: "111"
+    };
+    const header = {
+        url: api_url,
+        type: "GET",
+        dataType: "json",
+        cache: false,
+        data: data
+    };
+
+    return $.ajax(header);
+}
+
+const parseRSAKey = (key_json) => {
+    const key_obj = JSON.parse(key_json);
+    return {
+        coeff: new BigInteger(key_obj.coeff),
+        d: new BigInteger(key_obj.d),
+        dmp1: new BigInteger(key_obj.dmp1),
+        dmq1: new BigInteger(key_obj.dmq1),
+        e: key_obj.e,
+        n: new BigInteger(key_obj.n),
+        p: new BigInteger(key_obj.p),
+        q: new BigInteger(key_obj.q)
+    };
+};
+
+const stringifyRSAKey = (rsa_key) => JSON.stringify({
+    coeff: rsa_key.coeff.toString(),
+    d: rsa_key.d.toString(),
+    dmp1: rsa_key.dmp1.toString(),
+    dmq1: rsa_key.dmq1.toString(),
+    e: rsa_key.e,
+    n: rsa_key.n.toString(),
+    p: rsa_key.p.toString(),
+    q: rsa_key.q.toString()
+});
+
+const keyGen = (pass) => cryptico.generateRSAKey(pass, 1024);
+
+const splitByLength = (str, length) => {
+    let resultArr = [];
+    if (!str || !length || length < 1) {
+        return resultArr;
     }
+    let index = 0;
+    let start = index;
+    let end = start + length;
+    while (start < str.length) {
+        resultArr[index] = str.substring(start, end);
+        index++;
+        start = end;
+        end = start + length;
+    }
+    return resultArr;
 };
 
-const checkAuthorityInterface = () => {
-    ownership(user_account).then((token_ids) => {
-        console.log(token_ids);
-        if (token_ids.length === 0) {
-            output("あなたはいまトークンを所持していません。");
-        } else if (token_ids.indexOf(current_token_id) > -1) {
-            checkAuthority(current_token_id).then((authority) => {
-                console.log(authority);
-                output("<p>あなたが持っている権限は次のとおりです。<ul>"
-                    + "<li>国の管理権限：" + (authority.indexOf(1) ? "あり" : "なし") + "</li>"
-                    + "<li>株の所有：" + (authority.indexOf(2) ? "あり" : "なし") + "</li>"
-                    + "<li>会社権限：" + (authority.indexOf(3) ? "あり" : "なし") + "</li>"
-                    + "</ul></p>");
-            }, (error) => {
-                console.error(error);
-                output("トークンの取得に失敗しました");
-            });
-        } else {
-            output("あなたはいまトークン(ID: " + current_token_id + ")を所持していません。");
-        }
-    }, (error) => {
-        console.error(error);
-        output("残高の取得に失敗しました。");
-    });
-};
+const decrypt = (encoded_url) => {
+    if (myRSAKey) {
+        const d = myRSAKey.d;
+        const n = myRSAKey.n;
+        const m = new BigInteger(encoded_url);
+        const result_url = splitByLength(m.modPow(d, n).toString(), 4).map((char) => {
+            return String.fromCharCode(Number(char));
+        }).join("");
 
-const requestInfoInterface = () => {
-    output("残高を取得していまふ。");
-    balanceOf(user_account).then((balance) => {
-        console.log(balance);
-        if (Number(balance) > 0) {
-            output("暗号化されたデータを解読中です。");
-            requestInfo(user_account);
-        } else if (Number(balance) === 0) {
-            output("あなたはまだトークンを持っていません。");
-        } else {
-            output("残高が不明な値です。");
-        }
-    });
+        return result_url;
+    } else {
+        alert("鍵を作成して下さい");
+    }
 };
 
 $(() => {
     try {
-        window.myRSAKey = parseRSAKey(JSON.parse(localStorage.getItem("RSAKey")));
+        myRSAKey = parseRSAKey(localStorage.getItem("RSAKey"));
     } catch (e) {
         console.log("RSAキーが取得できません。");
     }
@@ -189,21 +296,21 @@ $(() => {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider
-        window.web3js = new Web3(web3.currentProvider);
+        web3js = new Web3(web3.currentProvider);
     } else {
-        window.web3js = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
+        web3js = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
     }
 
-    window.contract = new web3js.eth.Contract(contractABI, contractAddress);
-    window.methods = contract.methods;
+    contract = new web3js.eth.Contract(contractABI, contractAddress);
+    methods = contract.methods;
 
     web3js.eth.getAccounts((error, accounts) => {
         if (!error) {
-            window.user_account = accounts[0];
+            user_account = accounts[0];
             createCommand();
             ownership(user_account).then((token_ids) => {
-                window.ownership_token_ids = token_ids;
-                window.current_token_id = (token_ids) ? token_ids[0] : NaN;
+                ownership_token_ids = token_ids;
+                current_token_id = (token_ids) ? token_ids[0] : NaN;
             }, (error) => {
                 console.error(error);
                 output("トークンの取得に失敗しました。");
@@ -214,160 +321,3 @@ $(() => {
         }
     });
 });
-
-const getTotalSupply = () => {
-    return contract.methods.getTotalSupply().call();
-};
-
-const balanceOf = (owner) => {
-    return contract.methods.balanceOf(owner).call();
-};
-
-const ownership = (owner) => {
-    return contract.methods.ownership(owner).call();
-};
-
-const ownerOf = (token_id) => {
-    return contract.methods.ownerOf(token_id).call();
-};
-
-const transfer = (to, token_id) => {
-    return contract.methods.transfer(to, token_id).send({from: user_account});
-};
-
-const approve = (to, token_id) => {
-    return contract.methods.approve(to, token_id).send({from: user_account});
-};
-
-const takeOwnership = (token_id) => {
-    return contract.methods.takeOwnership(token_id).send({from: user_account});
-};
-
-const createToken = (approver, authority, administer) => {
-    return contract.methods.createToken(approver, authority, administer).send({from: user_account});
-};
-
-const deleteToken = (token_id) => {
-    return contract.methods.deleteToken(token_id).send({from: user_account});
-};
-
-const addAdminister = (token_id, administers) => {
-    return contract.methods.addAdminister(token_id, administers).send({from: user_account});
-};
-
-const changeAdminister = (token_id, administers) => {
-    return contract.methods.changeAdminister(token_id, administers).send({from: user_account});
-};
-
-const addAuthority = (token_id, authority) => {
-    return contract.methods.addAuthority(token_id, authority).send({from: user_account});
-};
-
-const changeAuthority = (token_id, changeAuthority) => {
-    return contract.methods.changeAdminister(token_id, authority).send({from: user_account});
-};
-
-const checkAuthority = (token_id) => {
-    return contract.methods.checkAuthority(token_id).call();
-};
-
-const checkAdministers = (token_id) => {
-    return contract.methods.checkAuthority(token_id).call();
-};
-
-const checkPublicKey = (token_id) => {
-    return contract.methods.checkAuthority(token_id).call();
-};
-
-const refleshPublicKey = (token_id, n_of_public_key, e_of_public_key) => {
-    return contract.methods.refleshPublicKey(token_id, n_of_public_key, e_of_public_key).send({from: user_account});
-};
-
-const output = (html) => {
-    $(".output").each((i, e) => {
-        $(e).html(html);
-    });
-};
-
-const requestInfo = (owner) => {
-    const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
-    const data = {
-        owner: encodeURIComponent(owner)
-    };
-    const header = {
-        url: api_url,
-        type: "GET",
-        dataType: "json",
-        cache: false,
-        data: data
-    };
-    const f = (result) => {
-        console.log(result);
-        const signed_url = decrypt(result);
-        console.log(signed_url);
-        window.open(signed_url);
-        output("データが取得できました。新しい画面が開いて中身を確認できるはずです。");
-    };
-    const g = (error) => {
-        console.error(error);
-    };
-
-    return $.ajax(header).then(f, g);
-}
-
-const parseRSAKey = (keyJSON) => {
-    if (keyJSON) {
-        return {
-            coeff: new BigInteger(keyJSON.coeff),
-            d: new BigInteger(keyJSON.d),
-            dmp1: new BigInteger(keyJSON.dmp1),
-            dmq1: new BigInteger(keyJSON.dmq1),
-            e: keyJSON.e,
-            n: new BigInteger(keyJSON.n),
-            p: new BigInteger(keyJSON.p),
-            q: new BigInteger(keyJSON.q)
-        };
-    }
-};
-
-const stringifyRSAKey = (RSAKey) => {
-    if (RSAKey) {
-        return JSON.stringify({
-            coeff: RSAKey.coeff.toString(),
-            d: RSAKey.d.toString(),
-            dmp1: RSAKey.dmp1.toString(),
-            dmq1: RSAKey.dmq1.toString(),
-            e: RSAKey.e,
-            n: RSAKey.n.toString(),
-            p: RSAKey.p.toString(),
-            q: RSAKey.q.toString()
-        });
-    }
-};
-
-const keyGen = (pass) => {
-    console.log(pass);
-    window.myRSAKey = cryptico.generateRSAKey(pass, 1024);
-};
-
-const popUpKeygen = () => {
-    alert("鍵を作成して下さい");
-};
-
-const decrypt = (m_list) => {
-    if (!window.myRSAKey) {
-        popUpKeygen();
-    }
-
-    let result_url = "";
-    const big_d = myRSAKey.d;
-    const big_n = myRSAKey.n;
-
-    m_list.forEach((m) => {
-        const big_m = new BigInteger(m);
-        const char = big_m.modPow(big_d, big_n).divide(new BigInteger("1" + Array(200).fill("0").join(""))).toString();
-        const str = String.fromCharCode(char);
-        result_url += str;
-    });
-    return result_url;
-};
