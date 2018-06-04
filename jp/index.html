@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <title>PLC規格デモ</title>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" />
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../js/web3.min.js"></script>
+        <script type="text/javascript" src="../js/cryptico.js"></script>
+        <script type="text/javascript" src="../js/contractABI.js"></script>
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-105834787-1', 'auto');
+        ga('send', 'pageview');
+        </script>
+        <style>
+        .navbar-default {
+            background-color: #65baad;
+            border-color: #3e6962;
+        }
+        .navbar-default .navbar-brand {
+            color: #ffffff;
+        }
+        .command{
+            margin: 5px;
+        }
+        .output{
+            border: 1px solid black;
+            min-height: 20px;
+            margin: 10px 10px 100px;
+            padding: 10px;
+            font-size: 22px;
+        }
+        .form-control{
+            display: inline !important;
+            width: auto !important;
+        }
+        .btn-command{
+            min-width: 140px;
+        }
+        .btn-header{
+            padding: 12px 18px;
+        }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="https://www.geomerlin.com">Geomerlin Systems</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <div class="navbar-form navbar-right" id='ac-form'>
+                        <div class="form-group">
+                        <span id='user-name'>ようこそ</span>
+                        </div>
+                        <div class="form-group" id='head-buttons'>
+                            <button class="btn btn-primary" id ='signin-btn' onclick='newTab("https://www.geomerlin.com")'>Sign in</button>
+                            <button class="btn btn-default" id='signup-btn'onclick='newTab("https://www.geomerlin.com")'>Sing up</button>
+                        </div>
+                    </div>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </nav>
+        <div id="home-page" class="container content">
+            <div class="row" style="margin-bottom: 10px;margin-top:40px;">
+                <div class="col-xs-0 col-sm-2 col-lg-2"></div>
+                <div class="col-xs-12 col-sm-8 col-lg-8">
+                    <div id="commands" style="margin: 10px;">
+                        <h3 class="chapter bg-warning">分散社内システムを使ってみよう</h3>
+                        <div class="command">
+                            <button type="button" id="createToken" class="btn btn-primary btn-command">トークン作成申請</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="deleteToken" class="btn btn-primary btn-command">トークン削除</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="checkAuthority" class="btn btn-info btn-command">所持トークン確認</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="getTotalSupply" class="btn btn-info btn-command">総発行数</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="transfer" class="btn btn-primary btn-command">トークン送金</button>
+                            <input type="text" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" value="" />
+                        </div>
+                        <div class="command">
+                            <button type="button" id="changePublicKey" class="btn btn-primary btn-command">パスワード変更</button>
+                            <input type="text" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" value="" />
+                        </div>
+                        <div class="command">
+                            <button type="button" id="requestInfo" class="btn btn-info btn-command">情報開示</button>
+                        </div>
+                        <div class="output"></div>
+                    </div>
+                </div>
+                <div class="col-xs-0 col-sm-2 col-lg-2"></div>
+            </div>
+        </div>
+        <script type="text/javascript" src="policy.js"></script>
+    </body>
+</html>
