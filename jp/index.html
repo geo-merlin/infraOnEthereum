@@ -36,6 +36,9 @@
             padding: 10px;
             font-size: 22px;
         }
+        .textbox{
+            min-width: 240px;
+        }
         .form-control{
             display: inline !important;
             width: auto !important;
@@ -93,11 +96,11 @@
                         </div>
                         <div class="command">
                             <button type="button" id="transfer" class="btn btn-primary btn-command">トークン送金</button>
-                            <input type="text" id="to-address-input" class="form-control" placeholder="宛先のアドレスを入力してください" value="" />
+                            <input type="text" id="to-address-input" class="textbox form-control" placeholder="宛先のアドレスを入力してください" value="" />
                         </div>
                         <div class="command">
                             <button type="button" id="changePublicKey" class="btn btn-primary btn-command">パスワード変更</button>
-                            <input type="text" id="new-password-input" class="form-control" placeholder="新しいパスワードを入力してください" value="" />
+                            <input type="text" id="new-password-input" class="textbox form-control" placeholder="新しいパスワードを入力してください" value="" />
                         </div>
                         <div class="command">
                             <button type="button" id="requestInfo" class="btn btn-info btn-command">情報開示</button>
