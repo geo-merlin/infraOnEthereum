@@ -229,7 +229,7 @@ contract ManagerToken is MNGR {
         uint8 _authorityId,
         bool _propriety
     ) public owns(msg.sender, _fromTokenId) validToken(_toTokenId)/* editable(_fromTokenId, _toTokenId)*/ {
-        //require(authorityOf[_fromTokenId][_authorityId] == true);
+        require(indexToOwner[issuerTokenId] == msg.sender || authorityOf[_fromTokenId][_authorityId] == true);
         authorityOf[_toTokenId][_authorityId] = _propriety;
 
         emit LogChangeAuthority(_toTokenId, _authorityId, _propriety);
