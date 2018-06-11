@@ -89,7 +89,8 @@
                             <button type="button" id="deleteToken" class="btn btn-primary btn-command">Delete my token</button>
                         </div>
                         <div class="command">
-                            <button type="button" id="checkAuthority" class="btn btn-info btn-command">See my authority</button>
+                            <button type="button" id="authorityOf" class="btn btn-info btn-command">See my authority</button>
+                            <input type="text" id="authority-id" class="textbox form-control" placeholder="Fill in a authority id to check" value="" />
                         </div>
                         <div class="command">
                             <button type="button" id="getTotalSupply" class="btn btn-info btn-command">Get total supply</button>
@@ -99,7 +100,7 @@
                             <input type="text" id="to-address-input" class="textbox form-control" placeholder="Fill in a destination address" value="" />
                         </div>
                         <div class="command">
-                            <button type="button" id="changePublicKey" class="btn btn-primary btn-command">Change the password</button>
+                            <button type="button" id="refreshPublicKey" class="btn btn-primary btn-command">Change the password</button>
                             <input type="text" id="new-password-input" class="textbox form-control" placeholder="Fill in a new password" value="" />
                         </div>
                         <div class="command">
@@ -201,7 +202,7 @@
 
                               <br><p>Next,pls push this button to check your token.</p>
                               <div class="command">
-                                  <button type="button" id="checkAuthority2" class="btn btn-info">authorityOf</button>
+                                  <button type="button" id="authorityOf2" class="btn btn-info">authorityOf</button>
                               </div>
                               <div class="output"></div>
 　　                　　　　　<br><p>Could you check your authority?</p>
@@ -212,7 +213,8 @@
                               <br>
 　　                　　　　　<p>Next,you can set/change your public key of the token.</p>
                               <div class="command">
-                                <button type="button" id="requestInfo2" class="btn btn-info">refreshPublicKey</button>
+                                <button type="button" id="refreshPublicKey2" class="btn btn-info">refreshPublicKey</button>
+                                <input type="text" id="new-password-input2" class="textbox form-control" placeholder="Fill in a new password" value="" />
                               </div>
                               <div class="output"></div>
 　　                　　　　　<p>Then you can use PaaS with Ethereum by push this button.</p>
@@ -220,17 +222,17 @@
                                 <button type="button" id="requestInfo2" class="btn btn-info">Requesting Image via AWS</button>
                               </div>
                               <div class="output"></div>
-                              
+
 　　                　　　　　<p>That is the usage of the token as client.Next,we'll show you the usage as a manager.</p>
                               <img></img>
                               <div class="command">
-                                <button type="button" id="requestInfo2" class="btn btn-info">Show a token under your token</button>
+                                <button type="button" id="authorityOfSubordinate2" class="btn btn-info">Show a token under your token</button>
                               </div>
                               <div class="output"></div>
 
 　　                　　　　　<p>Change his authority.</p>
                               <div class="command">
-                                <button type="button" id="requestInfo2" class="btn btn-info">changeAuthority</button>
+                                <button type="button" id="switchAuthority2" class="btn btn-info">switchAuthority</button>
                               </div>
                               <div class="output"></div>
 

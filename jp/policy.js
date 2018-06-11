@@ -7,8 +7,6 @@ let methods;
 let user_account;
 let ownership_token_ids;
 let current_token_id;
-const user_account1 = "0xE30B340A0B6c94EcA7B52bE912827811c04821A1";
-const user_account2 = "0x2093bf5d91568C466b6e989eC4F441d90fA1c048";
 const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3node";
 
 const output = (html) => {

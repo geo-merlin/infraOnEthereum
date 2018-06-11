@@ -1,4 +1,4 @@
-const contractAddress = "0x015cc4ccf6b2cc9b77460e0937b9c300e354676a";
+const contractAddress = "0xcb12e913749d9d5aaf165510f44e7301a5cd2860";
 const contractABI = [
 	{
 		"anonymous": false,
@@ -26,21 +26,20 @@ const contractABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_tokenId",
+				"name": "_fromTokenId",
 				"type": "uint256"
 			},
 			{
-				"name": "_administers",
-				"type": "address[]"
-			}
-		],
-		"name": "addAdminister",
-		"outputs": [
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
 			{
-				"name": "success",
-				"type": "bool"
+				"name": "_authorityIds",
+				"type": "uint8[]"
 			}
 		],
+		"name": "addAuthority",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -49,21 +48,20 @@ const contractABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_tokenId",
+				"name": "_fromTokenId",
 				"type": "uint256"
 			},
 			{
-				"name": "_authority",
-				"type": "uint8[]"
-			}
-		],
-		"name": "addAuthority",
-		"outputs": [
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
 			{
-				"name": "success",
-				"type": "bool"
+				"name": "_managerTokenIds",
+				"type": "uint256[]"
 			}
 		],
+		"name": "addManagers",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -90,17 +88,66 @@ const contractABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
 			},
 			{
-				"indexed": true,
-				"name": "newOwner",
-				"type": "address"
+				"indexed": false,
+				"name": "_nOfPublicKey",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "_eOfPublicKey",
+				"type": "uint256"
 			}
 		],
-		"name": "OwnershipTransferred",
+		"name": "LogChangePublicKey",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_authorityId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_propriety",
+				"type": "bool"
+			}
+		],
+		"name": "LogChangeAuthority",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_managerTokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_propriety",
+				"type": "bool"
+			}
+		],
+		"name": "LogChangeManagers",
 		"type": "event"
 	},
 	{
@@ -117,7 +164,7 @@ const contractABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "Delete",
+		"name": "LogDeleteToken",
 		"type": "event"
 	},
 	{
@@ -134,8 +181,27 @@ const contractABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "Create",
+		"name": "LogCreateToken",
 		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_approver",
+				"type": "address"
+			}
+		],
+		"name": "createToken",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -165,88 +231,10 @@ const contractABI = [
 			{
 				"name": "_tokenId",
 				"type": "uint256"
-			},
-			{
-				"name": "_administers",
-				"type": "address[]"
-			}
-		],
-		"name": "changeAdminister",
-		"outputs": [
-			{
-				"name": "success",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			},
-			{
-				"name": "_authority",
-				"type": "uint8[]"
-			}
-		],
-		"name": "changeAuthority",
-		"outputs": [
-			{
-				"name": "success",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_approver",
-				"type": "address"
-			},
-			{
-				"name": "_authority",
-				"type": "uint8[]"
-			},
-			{
-				"name": "_administers",
-				"type": "address[]"
-			}
-		],
-		"name": "createToken",
-		"outputs": [
-			{
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
 			}
 		],
 		"name": "deleteToken",
-		"outputs": [
-			{
-				"name": "success",
-				"type": "bool"
-			}
-		],
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -267,13 +255,104 @@ const contractABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "refleshPublicKey",
-		"outputs": [
+		"name": "refreshPublicKey",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
-				"name": "success",
+				"name": "_fromTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_authorityIds",
+				"type": "uint8[]"
+			}
+		],
+		"name": "removeAuthority",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_fromTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_managerTokenIds",
+				"type": "uint256[]"
+			}
+		],
+		"name": "removeManagers",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_fromTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_authorityId",
+				"type": "uint8"
+			},
+			{
+				"name": "_propriety",
 				"type": "bool"
 			}
 		],
+		"name": "switchAuthority",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_fromTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_toTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_managerTokenId",
+				"type": "uint256"
+			},
+			{
+				"name": "_propriety",
+				"type": "bool"
+			}
+		],
+		"name": "switchManagers",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -311,24 +390,33 @@ const contractABI = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "authorityOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -341,68 +429,7 @@ const contractABI = [
 		"name": "balanceOf",
 		"outputs": [
 			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "checkAdministers",
-		"outputs": [
-			{
-				"name": "administers",
-				"type": "address[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "checkAuthority",
-		"outputs": [
-			{
-				"name": "authority",
-				"type": "uint8[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "checkPublicKey",
-		"outputs": [
-			{
-				"name": "n",
-				"type": "string"
-			},
-			{
-				"name": "e",
+				"name": "_balance",
 				"type": "uint256"
 			}
 		],
@@ -465,11 +492,34 @@ const contractABI = [
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "manager",
+		"name": "issuerTokenId",
 		"outputs": [
 			{
 				"name": "",
-				"type": "address"
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "managersOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -487,7 +537,7 @@ const contractABI = [
 		"name": "ownerOf",
 		"outputs": [
 			{
-				"name": "",
+				"name": "_owner",
 				"type": "address"
 			}
 		],
@@ -526,6 +576,29 @@ const contractABI = [
 		"outputs": [
 			{
 				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "publicKeyOf",
+		"outputs": [
+			{
+				"name": "n",
+				"type": "string"
+			},
+			{
+				"name": "e",
 				"type": "uint256"
 			}
 		],
