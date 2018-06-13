@@ -149,7 +149,7 @@ contract ManagerToken is MNGR {
     }
 
     /** @dev Create token. **/
-    function createToken(address _approver) public onlyIssuer returns (uint256) {
+    function createToken(address _approver) public returns (uint256) {
         // @notice Anyone have not owned the token whose id equals 'tokenCount'.
         //require(indexToOwner[tokenCount.add(1)] == address(0));
 
