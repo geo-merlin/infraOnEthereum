@@ -34,33 +34,14 @@ const showMyTokens = () => {
 const createCommand = () => {
     $("#createToken").on("click", () => {
         output("Please wait for application. It takes to get the result about a minute.");
-        createApprove(user_account).then((result) => {
+        methods.createToken(user_account).send({from: user_account}).once("transactionHash", (hash) => {
+            console.log(`The transaction hash is ${hash}.`);
+        }).once("receipt", (result) => {
             console.log(result);
-            output("<p>You succeed in application."/* + " Please check your balance in a minute."
-            + "What you have to do after the completion is refreshing your token password."*/ + "</p>");
-        }, (error) => {
-            console.error(error);
-            output("Fail to apply.");
-        });
-    });
-
-    $("#createSubToken2").on("click", () => {
-        output("Please wait for application. It takes to get the result about a minute.");
-        createApprove(user_account).then((result) => {
-            console.log(result);
-            output("<p>You succeed in application.</p>");
-        }, (error) => {
-            console.error(error);
-            output("Fail to apply.");
-        });
-    });
-
-    $("#switchAuth2").on("click", () => {
-        output("Please wait for application. It takes to get the result about a minute.");
-        switchAuth(current_token_id).then((result) => {
-            console.log(result);
-            output("<p>You succeed in application.</p>");
-        }, (error) => {
+            current_token_id = result.event.Transfer.returnValues._tokenId;
+            output("<p>You succeed in getting token."
+            + "What you have to do after the completion is refreshing your token password.</p>");
+        }).on("error", (error) => {
             console.error(error);
             output("Fail to apply.");
         });
@@ -68,12 +49,14 @@ const createCommand = () => {
 
     $("#createToken2").on("click", () => {
         output("Please wait for application. It takes to get the result about a minute.");
-        createApprove(user_account).then((result) => {
+        methods.createToken(user_account).send({from: user_account}).once("transactionHash", (hash) => {
+            console.log(`The transaction hash is ${hash}.`);
+        }).once("receipt", (result) => {
             console.log(result);
-            const hash = (result) ? result : "nothing"
-            output("<p>You succeed in application. Please check your balance in a minute."
+            current_token_id = result.event.Transfer.returnValues._tokenId;
+            output("<p>You succeed in getting token."
             + "What you have to do after the completion is refreshing your token password.</p>");
-        }, (error) => {
+        }).on("error", (error) => {
             console.error(error);
             output("Fail to apply.");
         });
@@ -123,26 +106,14 @@ const createCommand = () => {
     });
 
     $("#authorityOfSubordinate2").on("click", () => {
-        if (subordinate_token_id) {
-            methods.ownerOf(subordinate_token_id).call().then((result) => {
-                console.log(result);
-                if (result) {
-                    methods.authorityOf(subordinate_token_id, 1).call().then((result) => {
-                        console.log(result);
-                        const authority_id = 1;
-                        output(`Your subordinate ${(result) ? "are" : "are not"} entitled to the authority No.${authority_id} .`);
-                    }, (error) => {
-                        console.error(error);
-                        output("Fail to get your subordinate's authority.");
-                    });
-                } else {
-                    output("Don't you do according to the above procedure?"
-                    + "If you proceed correctly, Your subordinate might abscond.");
-                }
-            });
-        } else {
-            output("There are not your subordinates.");
-        }
+        methods.authorityOf(2, 2).call().then((result) => {
+            console.log(result);
+            const authority_id = 2;
+            output(`Your subordinate ${(result) ? "are" : "are not"} entitled to the authority No.${authority_id} .`);
+        }, (error) => {
+            console.error(error);
+            output("Fail to get your subordinate's authority.");
+        });
     });
 
     $("#deleteToken").on("click", () => {
@@ -152,7 +123,9 @@ const createCommand = () => {
             if (Number(balance) > 0) {
                 output("Please wait for token deleted.");
                 methods.deleteToken(current_token_id).send({from: user_account})
-                .on("receipt", (result) => {
+                .once("transactionHash", (hash) => {
+                    console.log(`The transaction hash is ${hash}.`);
+                }).on("receipt", (result) => {
                     console.log(result);
                     output("Succeed in removing your token.");
                 }).on("error", (error) => {
@@ -220,7 +193,9 @@ const createCommand = () => {
                     const n = my_rsa_key.n.toString();
                     const e = my_rsa_key.e;
                     methods.refreshPublicKey(current_token_id, n, e).send({from: user_account})
-                    .on("receipt", (result) => {
+                    .once("transactionHash", (hash) => {
+                        console.log(`The transaction hash is ${hash}.`);
+                    }).once("receipt", (result) => {
                         console.log(result);
                         localStorage.setItem("RSAKey", stringifyRSAKey(my_rsa_key));
                         output("Succeed in refreshing the password");
@@ -250,7 +225,10 @@ const createCommand = () => {
                     my_rsa_key = keyGen(password);
                     const n = my_rsa_key.n.toString();
                     const e = my_rsa_key.e;
-                    refreshPublicKey(current_token_id, n, e).on("receipt", (result) => {
+                    methods.refreshPublicKey(current_token_id, n, e).send({from: user_account})
+                    .once("transactionHash", (hash) => {
+                        console.log(`The transaction hash is ${hash}.`);
+                    }).once("receipt", (result) => {
                         console.log(result);
                         localStorage.setItem("RSAKey", stringifyRSAKey(my_rsa_key));
                         output("Succeed in refreshing the password");
@@ -298,6 +276,7 @@ const createCommand = () => {
             console.log(balance);
             if (Number(balance) > 0) {
                 const f = (res) => {
+                    console.log(res);
                     const signed_url = decrypto(JSON.parse(res).result);
                     console.log(signed_url);
                     window.open(signed_url);
@@ -319,15 +298,17 @@ const createCommand = () => {
     });
 
     $("#switchAuthority2").on("click", () => {
-        if (current_token_id && subordinate_token_id) {
+        if (current_token_id) {
             output("Please wait for changing authority.");
-            methods.switchAuthority(current_token_id, subordinate_token_id, 1, true).send({from: user_account})
-            .on("receipt", (result) => {
+            methods.switchAuthority(current_token_id, 2, 2, true).send({from: user_account})
+            .once("transactionHash", (hash) => {
+                console.log(`The transaction hash is ${hash}.`);
+            }).on("receipt", (result) => {
                 console.log(result);
                 output("Succeed in changing your subordinate's authority.");
             }).on("error", (error) => {
                 console.log(error);
-                output("Fail to changing authority.");
+                output("You don't own the specific token.");
             });
         } else {
             output("Fail to execute. Don't you do according to the above procedure?");
@@ -335,49 +316,11 @@ const createCommand = () => {
     });
 };
 
-const createApprove = (owner) => {
-    const resource_name = "/createapprove";
-    const data = JSON.stringify({
-        claimant: encodeURIComponent(owner),
-        name: "create"
-    });
-    const header = {
-        url: api_url + resource_name,
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        crossDomain: true,
-        cache: false,
-        data: data
-    };
-
-    return $.ajax(header);
-};
-
-const switchAuth = (token_id) => {
-    const resource_name = "/createapprove";
-    const data = JSON.stringify({
-        claimant: Number(token_id),
-        name: "switchAuth"
-    });
-    const header = {
-        url: api_url + resource_name,
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        crossDomain: true,
-        cache: false,
-        data: data
-    };
-
-    return $.ajax(header);
-};
-
 const requestInfo = (owner) => {
     const resource_name = "/requestinfo";
     const data = {
         token_id: current_token_id,
-        name: "111"
+        name: "politics"
     };
     const header = {
         url: api_url + resource_name,
