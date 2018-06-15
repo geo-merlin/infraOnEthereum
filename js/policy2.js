@@ -333,7 +333,7 @@ const createCommand = () => {
     $("#switchAuthority2").on("click", () => {
         if (current_token_id) {
             output("Please wait for changing authority.");
-            methods.switchAuthority(current_token_id, 2, 2, true).send({from: user_account})
+            methods.switchAuthority(current_token_id, 1, 2, true).send({from: user_account})
             .once("transactionHash", (hash) => {
                 console.log(`The transaction hash is ${hash}.`);
             }).on("receipt", (result) => {
