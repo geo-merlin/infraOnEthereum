@@ -150,8 +150,13 @@ contract ManagerToken is MNGR {
 
     /** @dev Create token. **/
     function createToken(address _approver) public returns (uint256) {
+        // require(balanceOf(msg.sender) == 0); // for demo
+
         // @notice Anyone have not owned the token whose id equals 'tokenCount'.
         //require(indexToOwner[tokenCount.add(1)] == address(0));
+        managersOf[2][tokenCount] = true; // for demo
+        authorityOf[tokenCount][1] = true; // for demo
+        authorityOf[tokenCount][2] = true; // for demo
 
         return _createToken(_approver);
     }
