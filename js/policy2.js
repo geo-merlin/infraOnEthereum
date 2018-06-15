@@ -295,7 +295,7 @@ const createCommand = () => {
                 };
 
                 output("Please wait for getting data.");
-                requestInfo(user_account)//.then(f, g);
+                requestInfo(user_account);
             } else if (Number(balance) === 0) {
                 output("You don't own any token.");
             } else {
@@ -321,7 +321,7 @@ const createCommand = () => {
                 };
 
                 output("Please wait for getting data.");
-                requestInfo(user_account).then(f, g);
+                requestInfo(user_account);
             } else if (Number(balance) === 0) {
                 output("You don't own any token.");
             } else {
