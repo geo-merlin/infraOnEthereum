@@ -63,11 +63,35 @@ const createCommand = () => {
         });
     });
 
+    $("#ownership").on("click", () => {
+        methods.ownership(user_account).call().then((token_ids) => {
+            ownership_token_ids = token_ids;
+            current_token_id = (token_ids) ? token_ids[0] : NaN;
+            showMyTokens();
+        }, (error) => {
+            console.error(error);
+            output("Fail to get your tokens.");
+        });
+    });
+
+    $("#ownership2").on("click", () => {
+        methods.ownership(user_account).call().then((token_ids) => {
+            ownership_token_ids = token_ids;
+            current_token_id = (token_ids) ? token_ids[0] : NaN;
+            showMyTokens();
+        }, (error) => {
+            console.error(error);
+            output("Fail to get your tokens.");
+        });
+    });
+
     $("#authorityOf").on("click", () => {
         const authority_id = $("#authority-id").val();
         methods.ownership(user_account).call().then((token_ids) => {
             console.log(token_ids);
             ownership_token_ids = token_ids;
+            current_token_id = (current_token_id) ? current_token_id : (token_ids) ? token_ids[0] : NaN;
+            showMyTokens();
             if (token_ids.length === 0) {
                 output("You don't own any token.");
             } else if (token_ids.indexOf(current_token_id) > -1) {
@@ -89,6 +113,8 @@ const createCommand = () => {
         methods.ownership(user_account).call().then((token_ids) => {
             console.log(token_ids);
             ownership_token_ids = token_ids;
+            current_token_id = (current_token_id) ? current_token_id : (token_ids) ? token_ids[0] : NaN;
+            showMyTokens();
             if (token_ids.length === 0) {
                 output("You don't own any token.");
             } else if (token_ids.indexOf(current_token_id) > -1) {
@@ -161,6 +187,8 @@ const createCommand = () => {
             methods.ownership(user_account).call().then((token_ids) => {
                 console.log(token_ids);
                 ownership_token_ids = token_ids;
+                current_token_id = (current_token_id) ? current_token_id : (token_ids) ? token_ids[0] : NaN;
+                showMyTokens();
                 if (token_ids.indexOf(current_token_id) > -1) {
                     output("Please wait for sending your token.");
                     methods.transfer(to_address, token_id).send({from: user_account})
@@ -188,6 +216,8 @@ const createCommand = () => {
             methods.ownership(user_account).call().then((token_ids) => {
                 console.log(token_ids);
                 ownership_token_ids = token_ids;
+                current_token_id = (current_token_id) ? current_token_id : (token_ids) ? token_ids[0] : NaN;
+                showMyTokens();
                 if (token_ids.indexOf(current_token_id) > -1) {
                     output("Please wait for refreshing the token password.");
                     my_rsa_key = keyGen(password);
@@ -221,6 +251,8 @@ const createCommand = () => {
             methods.ownership(user_account).call().then((token_ids) => {
                 console.log(token_ids);
                 ownership_token_ids = token_ids;
+                current_token_id = (current_token_id) ? current_token_id : (token_ids) ? token_ids[0] : NaN;
+                showMyTokens();
                 if (token_ids.indexOf(current_token_id) > -1) {
                     output("Please wait for refreshing the token password.");
                     my_rsa_key = keyGen(password);
