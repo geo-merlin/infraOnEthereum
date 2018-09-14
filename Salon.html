@@ -130,11 +130,17 @@
                         <p>１個１個が区別でき、特別な個性のあるトークンであるNFTは、持ち主の認証やアカウント機能に有用です。</p>
                         <br>
                         <p>今回は会員証となるNFT(ERC721)があれば、このNFTの販売に関する法的調査のレポートが受け取れるようにしました。</p>
-                        <img src="https://d1akgkukuzijsp.cloudfront.net/ManagerToken.jpg" width="90%"></img>
-                        <p>① Create a token</p>
-                        <p>② Add a public keys these ID cards<p>
-                        <p>③ Request a server to execute a function which is authorized with the 'authority' attribution the token and sign by the private key</p>
-                        <p>④ Server check the sign by the public key, execute the function, and returns the result.</p>
+                        <br>
+                        <p>こんなカンジで認証します。</p>
+                        <img src="https://d1akgkukuzijsp.cloudfront.net/IMG_0532.JPG" width="90%"></img>
+                        <p>そのためには</p>
+                        <br>
+                        <p>①　トークンを作ってパスワード（公開鍵）をセットする<p>
+                        <br>
+                        <p>②　サーバーに署名を送り、コンテンツを要求する（自動）</p>
+                        <br>
+                        <p>③　サーバーは署名とトークンIDと公開鍵の一致を確認し、コンテンツを配信する。</p>
+                        <br>
                         <p>では次のページで早速試してみましょう</p>
                       </div>
                     </div>
@@ -159,6 +165,7 @@
                       <h3><b>会員証onイーサリアム</b></h3>
                       <br>
                       <p>まず、Metamaskからテストネット(Reopsten)に接続しないといけないので、次の案内に従って下さい。必ずgas代以上のテストEtherをボタンを押して受け取るようにしてください。<p>
+                      <br>
                       <p>Please install Metamask beforehead!</p>
                       <a href="https://metamask.io/">MetaMask</a>
                       <br>
@@ -166,18 +173,19 @@
                       <p><br>Push "BUY", Request "FAUCET", and wait for 1ETH is given to your wallet.</p>
 　　                　　　　　<br>
                       <br>
-                      <h3 class="chapter bg-warning"><b>Let's use our distributed office system!</b></h3>
-                      <img src="https://d1akgkukuzijsp.cloudfront.net/createTokenfunction.jpg" width="70%"></img>
+                      <h3 class="chapter bg-warning"><b>準備ができたら遊びましょう!</b></h3>
                       <p>このボタンを押して会員証を発行して下さい。今回は無料です。</p>
                       <div class="command">
                           <button type="button" id="createToken2" class="btn btn-primary">CreateToken</button>
                       </div>
+                      <div class="output"></div>
 　　                　　　　　<br>
 
                       <br><p>次に、ちゃんとできているかEthereumと通信して確認しましょう。</p>
                       <div class="command">
                           <button type="button" id="authorityOf2" class="btn btn-info">authorityOf</button>
                       </div>
+                      <div class="output"></div>
                       <br><p>次に、このトークンにあなたが自由にパスワードをセットします。英字で入力して下さい。</p>
                       <br>
                       <div class="command">
@@ -185,7 +193,7 @@
                         <input type="text" id="new-password-input2" class="textbox form-control" placeholder="Fill in a new password" value="" />
                       </div>
                       <div class="output"></div>
-　　                　　　　　<p>では、レポートを受け取りましょう。仮に、仮にですよ。このトークンを販売したら仮想通貨交換業資格は必要なんでしょうか？<b>[CAUSION]If you don't have a token, you cannot see the file.</b></p>
+　　                　　　　　<p>では、レポートを受け取りましょう。<br>仮に、仮にですよ。このトークンを販売したら仮想通貨交換業資格は必要なんでしょうか？<br><b>[CAUSION]If you don't have a token, you cannot see the file.</b></p>
                       <div class="command">
                         <button type="button" id="requestInfo2" class="btn btn-info">Request Image via AWS</button>
                       </div>
