@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <title>PLC DEMO</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/web3.min.js"></script>
+        <script type="text/javascript" src="js/cryptico.js"></script>
+        <script type="text/javascript" src="js/contractABI2.js"></script>
+        <style>
+        body{
+            margin-bottom: 100px;
+        }
+        .navbar-default {
+            background-color: #65baad;
+            border-color: #3e6962;
+        }
+        .navbar-default .navbar-brand {
+            color: #ffffff;
+        }
+        .command{
+            margin: 5px;
+        }
+        .output, .my-token-list{
+            border: 1px solid black;
+            min-height: 20px;
+            margin: 10px;
+            padding: 10px;
+            font-size: 22px;
+        }
+        .my-token-list > ul > li {
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .textbox{
+            min-width: 200px;
+        }
+        .form-control{
+            display: inline !important;
+            width: auto !important;
+        }
+        .btn-command{
+            min-width: 180px;
+        }
+        .btn-header{
+            padding: 12px 18px;
+        }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="https://www.geomerlin.com">Geomerlin Systems</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <div class="navbar-form navbar-right" id='ac-form'>
+                        <div class="form-group">
+                        <span id='user-name'>Welcome!</span>
+                        </div>
+                        <div class="form-group" id='head-buttons'>
+                            <button class="btn btn-primary" id ='signin-btn' onclick='newTab("https://www.geomerlin.com")'>Sign in</button>
+                            <button class="btn btn-default" id='signup-btn'onclick='newTab("https://www.geomerlin.com")'>Sing up</button>
+                        </div>
+                    </div>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </nav>
+        <div id="home-page" class="container content">
+            <div class="row" style="margin-bottom: 10px; margin-top: 40px;">
+                <div class="col-xs-0 col-sm-2 col-lg-2"></div>
+                <div class="col-xs-12 col-sm-8 col-lg-8">
+                    <div id="commands" style="margin: 10px;">
+                        <div>
+			    <h3 class="chapter bg-warning"><b>Guide</b></h3>
+			    <h4 class="chapter">Chapter1</h4>
+			    <p></p>
+			    <button type="button" class="btn btn-success" onclick="pop(1);">POP</button>
+			    <h4 class="chapter">Chapter2</h4>
+			    <p></p>
+			    <button type="button" class="btn btn-success" onclick="pop(2);">POP</button>
+                        </div>
+                        <h3 class="chapter bg-warning">Let's try our distributed office system!</h3>
+                        <div class="command">
+                            <button type="button" id="createToken" class="btn btn-primary btn-command">Offer to create a token</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="ownership" class="btn btn-primary btn-command">Check my tokens</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="getTotalSupply" class="btn btn-info btn-command">Get total supply</button>
+                        </div>
+                        <div class="command">
+                            <button type="button" id="transfer" class="btn btn-primary btn-command">Transfer my token</button>
+                            <input type="text" id="to-address-input" class="textbox form-control" placeholder="Fill in a destination address" value="" />
+                        </div>
+                        <div class="command">
+                            <button type="button" id="refreshPublicKey" class="btn btn-primary btn-command">Change the password</button>
+                            <input type="text" id="new-password-input" class="textbox form-control" placeholder="Fill in a new password" value="" />
+                        </div>
+                        <div class="command">
+                            <button type="button" id="requestInfo" class="btn btn-info btn-command">Get privileged data</button>
+                        </div>
+                        <div class="my-token-list"></div>
+                        <div class="output"></div>
+                    </div>
+                </div>
+                <div class="col-xs-0 col-sm-2 col-lg-2"></div>
+            </div>
+            <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <span class="modal-title" style="float:left;color:blue;font-size:36px;"> Salon Token Demo</span>
+                      <button type="button" class="btn btn-header" data-dismiss="modal" style="float:right;">X</button>
+                      <button type="button" class="btn btn-danger btn-header" style="float:right;" onclick="fontLarge();">FontBig↑</button>
+                    </div>
+                    <div class="modal-body the-modal-content">
+　　                  　　　  <div>
+                        <h3><b>会員証をEthereumで発行しよう</b></h3>
+                        <p>１個１個が区別でき、特別な個性のあるトークンであるNFTは、持ち主の認証やアカウント機能に有用です。</p>
+                        <br>
+                        <p>今回は会員証となるNFT(ERC721)があれば、このNFTの販売に関する法的調査のレポートが受け取れるようにしました。</p>
+                        <img src="https://d1akgkukuzijsp.cloudfront.net/ManagerToken.jpg" width="90%"></img>
+                        <p>① Create a token</p>
+                        <p>② Add a public keys these ID cards<p>
+                        <p>③ Request a server to execute a function which is authorized with the 'authority' attribution the token and sign by the private key</p>
+                        <p>④ Server check the sign by the public key, execute the function, and returns the result.</p>
+                        <p>では次のページで早速試してみましょう</p>
+                      </div>
+                    </div>
+                    <div class="loader loader-4" style="display: none;"></div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn " data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" onclick="next();">NEXT</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <span class="modal-title" style="float:left;color:blue;font-size:36px;">Manager Token Demo</span>
+                    <button type="button" class="btn btn-header" data-dismiss="modal" style="float:right;">X</button>
+                    <button type="button" class="btn btn-danger btn-header" style="float:right;" onclick="fontLarge();">FontBig↑</button>
+                  </div>
+                  <div class="modal-body the-modal-content">
+　　                <div>
+                      <h3><b>会員証onイーサリアム</b></h3>
+                      <br>
+                      <p>まず、Metamaskからテストネット(Reopsten)に接続しないといけないので、次の案内に従って下さい。必ずgas代以上のテストEtherをボタンを押して受け取るようにしてください。<p>
+                      <p>Please install Metamask beforehead!</p>
+                      <a href="https://metamask.io/">MetaMask</a>
+                      <br>
+                      <p>Switch to <b style="color:red;">Reopsten</b>, instead of Mainnet.</p>
+                      <p><br>Push "BUY", Request "FAUCET", and wait for 1ETH is given to your wallet.</p>
+　　                　　　　　<br>
+                      <br>
+                      <h3 class="chapter bg-warning"><b>Let's use our distributed office system!</b></h3>
+                      <img src="https://d1akgkukuzijsp.cloudfront.net/createTokenfunction.jpg" width="70%"></img>
+                      <p>このボタンを押して会員証を発行して下さい。今回は無料です。</p>
+                      <div class="command">
+                          <button type="button" id="createToken2" class="btn btn-primary">CreateToken</button>
+                      </div>
+　　                　　　　　<br>
+
+                      <br><p>次に、ちゃんとできているかEthereumと通信して確認しましょう。</p>
+                      <div class="command">
+                          <button type="button" id="authorityOf2" class="btn btn-info">authorityOf</button>
+                      </div>
+                      <br><p>次に、このトークンにあなたが自由にパスワードをセットします。英字で入力して下さい。</p>
+                      <br>
+                      <div class="command">
+                        <button type="button" id="refreshPublicKey2" class="btn btn-info">refreshPublicKey</button>
+                        <input type="text" id="new-password-input2" class="textbox form-control" placeholder="Fill in a new password" value="" />
+                      </div>
+                      <div class="output"></div>
+　　                　　　　　<p>では、レポートを受け取りましょう。仮に、仮にですよ。このトークンを販売したら仮想通貨交換業資格は必要なんでしょうか？<b>[CAUSION]If you don't have a token, you cannot see the file.</b></p>
+                      <div class="command">
+                        <button type="button" id="requestInfo2" class="btn btn-info">Request Image via AWS</button>
+                      </div>
+                      <div class="output"></div>
+
+　　                　<p>レポートは見れましたか？もし不調が多ければ一度ページを再読み込みすると良いかもしれません。当然トークンは消えませんので。</p>
+
+                    </div>
+                  </div>
+                    <div class="loader loader-4" style="display: none;"></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn " data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="back();">BACK</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          var is_pc = $(window).width() > $(window).height();
+          var modal_stack = [];
+          var last=1;
+          var fontbig=false;
+          var fontLarge=function(){if(fontbig){$("p").css("fontSize",24);return false;};$("p").css("fontSize",18);fontbig=true;}
+          var pop = function(num){showModal("#modal"+num);last=num;}
+          var next = function(){showModal();setTimeout(() => {pop(last+1);}, 500);}
+          var back = function(){showModal();setTimeout(() => {pop(last-1);}, 500);}
+          var showModal = (function () {
+            return function (modal_name) {
+                if (modal_name) {
+                    if (modal_stack.length > 0) {
+                        $(modal_name)
+                            .on("hidden.bs.modal", function () {
+                                $("body").addClass("modal-open"); //スクロールのフォーカスをモーダルに移す
+                                $(modal_name).off("hidden.bs.modal");
+                                modal_stack.pop();
+                            });
+                    } else {
+                        $(modal_name)
+                            .on("hidden.bs.modal", function () {
+                                $(modal_name).off("hidden.bs.modal");
+                                modal_stack.pop();
+                            });
+                    }
+                    modal_stack.push(modal_name);
+                    //console.log("modal_stack =", modal_stack);
+                    $(modal_name).modal("show");
+                } else {
+                    $(modal_stack.pop()).modal("hide");
+                }
+            };
+          })();
+          showModal("#modal1");
+          fontLarge();
+
+      </script>
+      <script type="text/javascript" src="js/salon.js"></script>
+    </body>
+</html>
