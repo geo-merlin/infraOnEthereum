@@ -8,16 +8,12 @@ contract PolicyToken is ERC721 {
     uint256 private tokenCount = 0;
 
     struct Authority {
-        bool admin;
         bool holder;
-        bool worker;
         string publicKeyN;
         string publicKeyE;
     }
 
-    event HasAdminAuthority(address _owner);
     event HasHolderAuthority(address _owner);
-    event HasWorkerAuthority(address _owner);
     event CreateToken(uint256 _tokenId);
 
     using SafeMath for uint256;
@@ -135,17 +131,8 @@ contract PolicyToken is ERC721 {
         indexToApproved[_tokenId] = _approved;
     }
 
-    //make sure that msg.sender allow to own token.
-    function hasAdminAuthority(address _owner) internal returns (bool) {
-        emit HasAdminAuthority(_owner);
-        return true;
-    }
     function hasHolderAuthority(address _owner) internal returns (bool) {
         emit HasHolderAuthority(_owner);
-        return true;
-    }
-    function hasWorkerAuthority(address _owner) internal returns (bool) {
-        emit HasWorkerAuthority(_owner);
         return true;
     }
 
@@ -156,18 +143,14 @@ contract PolicyToken is ERC721 {
         require(bytes(_publicKeyN).length > 0);
         require(bytes(_publicKeyE).length > 0);
         require(balanceOf(msg.sender) == 0);
-        bool adminAuthority = hasAdminAuthority(msg.sender);
         bool holderAuthority = hasHolderAuthority(msg.sender);
-        bool workerAuthority = hasWorkerAuthority(msg.sender);
 
         tokenCount = tokenCount.add(1);
         totalSupply = totalSupply.add(1);
         ownershipTokenId[msg.sender] = tokenCount;
         indexToOwner[tokenCount] = msg.sender;
         allToken[tokenCount] = Authority({
-            admin: adminAuthority,
             holder: holderAuthority,
-            worker: workerAuthority,
             publicKeyN: _publicKeyN,
             publicKeyE: _publicKeyE
         });
@@ -205,9 +188,7 @@ contract PolicyToken is ERC721 {
 
     // get token information.
     function checkAuthority(address _owner) public view returns (
-        bool isAdmin,
         bool isHolder,
-        bool isWorker,
         string publicKeyN,
         string publicKeyE
     ) {
@@ -216,9 +197,7 @@ contract PolicyToken is ERC721 {
         //require(tokenId > 0);
 
         Authority memory tokenAuthority = allToken[tokenId];
-        isAdmin = tokenAuthority.admin;
         isHolder = tokenAuthority.holder;
-        isWorker = tokenAuthority.worker;
         publicKeyN = tokenAuthority.publicKeyN;
         publicKeyE = tokenAuthority.publicKeyE;
     }
