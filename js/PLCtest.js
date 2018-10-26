@@ -124,7 +124,7 @@ $(() => {
     // Use Mist/MetaMask's provider
     window.web3js = new Web3(web3.currentProvider);
   } else {
-    window.web3js = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
+    window.web3js = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/"));;
   }
 
   window.contract = new web3js.eth.Contract(contractABI, contractAddress);
