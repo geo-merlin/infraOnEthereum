@@ -89,7 +89,7 @@ const createCommand = () => {
                 keyReflesh(n, e).on("receipt", (result) => {
                     console.log(result);
                     localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
-                    output("<p>パスワードを" + password + "に変更しました。</p>");
+                    output("<p>パスワードを変更しました。</p>");
                 }).on("error", (error) => {
                     console.error(error);
                     output("パスワードの変更に失敗しました。");
@@ -124,7 +124,7 @@ $(() => {
     // Use Mist/MetaMask's provider
     window.web3js = new Web3(web3.currentProvider);
   } else {
-    window.web3js = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/"));;
+    window.web3js = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/"));;
   }
 
   window.contract = new web3js.eth.Contract(contractABI, contractAddress);
@@ -203,7 +203,7 @@ const createTokenInterface = (password) => {
                 createToken(n, e).on("receipt", (result) => {
                     console.log(result);
                     localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
-                    output("登録されたパスワードは" + password + "です。");
+                    output("登録されました。");
                 }).on("error", (error) => {
                     console.error(error);
                     output("トークンの作成に失敗しました。");
@@ -229,9 +229,7 @@ const checkAuthorityInterface = () => {
             checkAuthority(user_account).then((authority) => {
                 console.log(authority);
                 output("<p>あなたが持っている権限は次のとおりです。<ul>"
-                    + "<li>国の管理権限：" + (authority.isAdmin ? "あり" : "なし") + "</li>"
-                    + "<li>株の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
-                    + "<li>会社権限：" + (authority.isWorker ? "あり" : "なし") + "</li>"
+                    + "<li>権利の所有：" + (authority.isHolder ? "あり" : "なし") + "</li>"
                     + "</ul></p>");
             }, (error) => {
                 console.error(error);
@@ -264,7 +262,7 @@ const requestInfoInterface = () => {
 };
 
 const requestInfo = (owner) => {
-    const api_url = "https://64dneqe5wc.execute-api.ap-northeast-1.amazonaws.com/prod/web3Lambda";
+    const api_url = "https://hz9dwl2145.execute-api.ap-northeast-1.amazonaws.com/test/web3-lambda";
     const data = {
         owner: encodeURIComponent(owner)
     };
