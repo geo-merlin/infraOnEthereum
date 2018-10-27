@@ -191,7 +191,6 @@ const output = (html) => {
 };
 
 const createTokenInterface = (password) => {
-    console.log(password);
     if (password.length > 0) {
         balanceOf(user_account).then((balance) => {
             console.log(balance);
@@ -261,33 +260,33 @@ const requestInfoInterface = () => {
     });
 };
 
-const requestInfo = (owner) => {
-    const api_url = "https://hz9dwl2145.execute-api.ap-northeast-1.amazonaws.com/test/web3-lambda";
-    const data = {
-        owner: encodeURIComponent(owner)
-    };
-    const header = {
-        url: api_url,
-        type: "GET",
-        dataType: "json",
+function requestInfo(owner) {
+    const sign = signRSA("1".concat("0".repeat(200)));
+    const req = {
+        url: "https://hz9dwl2145.execute-api.ap-northeast-1.amazonaws.com/test/web3-lambda",
+        method: "GET",
+        crossDomain: true,
         cache: false,
-        data: data
+        contentType: "application/json",
+        dataType: "json",
+        data: {
+            owner: owner, // encodeURIComponent(owner)
+            sign: sign
+        }
     };
-    const f = (result) => {
-        console.log(result);
-        const signed_url = decrypt(result);
-        console.log(signed_url);
-        window.open(signed_url);
-        output("データが取得できました。新しい画面が開いて中身を確認できるはずです。");
-    };
-    const g = (error) => {
-        console.error(error);
-    };
-
-    return $.ajax(header).then(f, g);
+    $.ajax(req).done(res => {
+        if (res) {
+            output("データが取得できました。新しい画面が開いて中身を確認できるはずです。");
+            window.open(res);
+        } else {
+            output("権限を確認できませんでした。");
+        }
+    }).fail(error => {
+      console.log("fail");
+    });
 }
 
-const parseRSAKey = (keyJSON) => {
+function parseRSAKey(keyJSON) {
     if (keyJSON) {
         return {
             coeff: new BigInteger(keyJSON.coeff),
@@ -300,9 +299,9 @@ const parseRSAKey = (keyJSON) => {
             q: new BigInteger(keyJSON.q)
         };
     }
-};
+}
 
-const stringifyRSAKey = (RSAKey) => {
+function stringifyRSAKey(RSAKey) {
     if (RSAKey) {
         return JSON.stringify({
             coeff: RSAKey.coeff.toString(),
@@ -315,10 +314,9 @@ const stringifyRSAKey = (RSAKey) => {
             q: RSAKey.q.toString()
         });
     }
-};
+}
 
 const keyGen = (pass) => {
-    console.log(pass);
     window.myRSAKey = cryptico.generateRSAKey(pass, 1024);
 };
 
@@ -343,3 +341,14 @@ const decrypt = (m_list) => {
     });
     return result_url;
 };
+
+function signRSA(intd) {
+    if (myRSAKey) {
+        const d = myRSAKey.d;
+        const n = myRSAKey.n;
+        const m = new BigInteger(intd);
+        return m.modPow(d, n).toString();
+    } else {
+        console.log("Could not find your private key.");
+    }
+}
