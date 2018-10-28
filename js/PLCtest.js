@@ -103,12 +103,20 @@ const createCommand = () => {
         }
     });
 
-    $("#requestInfo").on("click", () => {
-        requestInfoInterface(user_account);
+    $("#requestInfoA").on("click", () => {
+        requestInfoInterface("A.pdf");
+    });
+
+    $("#requestInfoB").on("click", () => {
+        requestInfoInterface("B.pdf");
+    });
+
+    $("#requestInfoC").on("click", () => {
+        requestInfoInterface("C.pdf");
     });
 
     $("#requestInfo2").on("click", () => {
-        requestInfoInterface(user_account);
+        requestInfoInterface("salon.pdf");
     });
 };
 
@@ -122,6 +130,7 @@ $(() => {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
+    console.log(web3);
     window.web3js = new Web3(web3.currentProvider);
   } else {
     window.web3js = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/"));;
@@ -131,8 +140,13 @@ $(() => {
 
   web3js.eth.getAccounts((error, accounts) => {
     if (!error) {
-        window.user_account = accounts[0];
-        createCommand();
+        console.log(accounts);
+        if (accounts.length > 0) {
+            window.user_account = accounts[0];
+            createCommand();
+        } else {
+            output("アカウントが指定されていません。");
+        }
     } else {
       console.error(error);
       output("アカウントが指定されていません。");
@@ -245,13 +259,13 @@ const checkAuthorityInterface = () => {
     });
 };
 
-const requestInfoInterface = () => {
-    output("残高を取得していまふ。");
+const requestInfoInterface = (file_name) => {
+    output("残高を取得しています。");
     balanceOf(user_account).then((balance) => {
         console.log(balance);
         if (Number(balance) > 0) {
             output("暗号化されたデータを解読中です。");
-            requestInfo(user_account);
+            requestInfo(user_account, file_name);
         } else if (Number(balance) === 0) {
             output("あなたはまだトークンを持っていません。");
         } else {
@@ -260,7 +274,7 @@ const requestInfoInterface = () => {
     });
 };
 
-function requestInfo(owner) {
+function requestInfo(owner, file_name) {
     const sign = signRSA("1".concat("0".repeat(200)));
     const req = {
         url: "https://hz9dwl2145.execute-api.ap-northeast-1.amazonaws.com/test/web3-lambda",
@@ -271,7 +285,8 @@ function requestInfo(owner) {
         dataType: "json",
         data: {
             owner: owner, // encodeURIComponent(owner)
-            sign: sign
+            sign: sign,
+            file_name: file_name
         }
     };
     $.ajax(req).done(res => {
