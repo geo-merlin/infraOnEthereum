@@ -104,11 +104,11 @@ const createCommand = () => {
     });
 
     $("#requestInfo").on("click", () => {
-        requestInfoInterface(user_account);
+        requestInfoInterface("salon.pdf");
     });
 
     $("#requestInfo2").on("click", () => {
-        requestInfoInterface(user_account);
+        requestInfoInterface("salon.pdf");
     });
 };
 
@@ -251,13 +251,13 @@ const checkAuthorityInterface = () => {
     });
 };
 
-const requestInfoInterface = () => {
+const requestInfoInterface = (file_name) => {
     output("残高を取得しています。");
     balanceOf(user_account).then((balance) => {
         console.log(balance);
         if (Number(balance) > 0) {
             output("暗号化されたデータを解読中です。");
-            requestInfo(user_account);
+            requestInfo(user_account, file_name);
         } else if (Number(balance) === 0) {
             output("あなたはまだトークンを持っていません。");
         } else {
@@ -266,7 +266,7 @@ const requestInfoInterface = () => {
     });
 };
 
-function requestInfo(owner) {
+function requestInfo(owner, file_name) {
     const sign = signRSA("1".concat("0".repeat(200)));
     const req = {
         url: "https://hz9dwl2145.execute-api.ap-northeast-1.amazonaws.com/test/web3-lambda",
@@ -278,7 +278,7 @@ function requestInfo(owner) {
         data: {
             owner: owner, // encodeURIComponent(owner)
             sign: sign,
-            file_name: "salon.pdf"
+            file_name: file_name
         }
     };
     $.ajax(req).done(res => {
