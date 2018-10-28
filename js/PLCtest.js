@@ -82,17 +82,25 @@ const createCommand = () => {
         if (password.length > 0) {
             ownership(user_account).then((token_id) => {
                 console.log(token_id);
-                output("パスワードが変更されるのを待機しています。");
-                keyGen(password);
-                const n = myRSAKey.n.toString();
-                const e = String(myRSAKey.e);
-                keyReflesh(n, e).on("receipt", (result) => {
-                    console.log(result);
-                    localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
-                    output("<p>パスワードを変更しました。</p>");
-                }).on("error", (error) => {
-                    console.error(error);
-                    output("パスワードの変更に失敗しました。");
+                checkAuthority(user_account).then((res) => {
+                    const old_n = res.publicKeyN;
+                    const old_e = res.publicKeyE;
+                    output("パスワードが変更されるのを待機しています。");
+                    keyGen(password);
+                    const n = myRSAKey.n.toString();
+                    const e = String(myRSAKey.e);
+                    if (old_n === n && old_e === e) {
+                        output("秘密鍵を復元しました。");
+                        return;
+                    }
+                    keyReflesh(n, e).on("receipt", (result) => {
+                        console.log(result);
+                        localStorage.setItem("RSAKey", stringifyRSAKey(myRSAKey));
+                        output("<p>パスワードを変更しました。</p>");
+                    }).on("error", (error) => {
+                        console.error(error);
+                        output("パスワードの変更に失敗しました。");
+                    });
                 });
             }, (error) => {
                 console.error(error);
@@ -104,7 +112,7 @@ const createCommand = () => {
     });
 
     $("#requestInfoA").on("click", () => {
-        requestInfoInterface("A.pdf");
+        requestInfoInterface("salon.pdf");
     });
 
     $("#requestInfoB").on("click", () => {
