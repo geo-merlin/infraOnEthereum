@@ -122,6 +122,7 @@ $(() => {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
+    console.log(web3);
     window.web3js = new Web3(web3.currentProvider);
   } else {
     window.web3js = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/"));;
@@ -131,8 +132,13 @@ $(() => {
 
   web3js.eth.getAccounts((error, accounts) => {
     if (!error) {
-        window.user_account = accounts[0];
-        createCommand();
+        console.log(accounts);
+        if (accounts.length > 0) {
+            window.user_account = accounts[0];
+            createCommand();
+        } else {
+            output("アカウントが指定されていません。");
+        }
     } else {
       console.error(error);
       output("アカウントが指定されていません。");
@@ -246,7 +252,7 @@ const checkAuthorityInterface = () => {
 };
 
 const requestInfoInterface = () => {
-    output("残高を取得していまふ。");
+    output("残高を取得しています。");
     balanceOf(user_account).then((balance) => {
         console.log(balance);
         if (Number(balance) > 0) {
@@ -271,7 +277,8 @@ function requestInfo(owner) {
         dataType: "json",
         data: {
             owner: owner, // encodeURIComponent(owner)
-            sign: sign
+            sign: sign,
+            file_name: "salon.pdf"
         }
     };
     $.ajax(req).done(res => {
