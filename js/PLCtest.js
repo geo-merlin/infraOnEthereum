@@ -112,15 +112,15 @@ const createCommand = () => {
     });
 
     $("#requestInfoA").on("click", () => {
-        requestInfoInterface("salon.pdf");
+        requestInfoInterface("A.pdf");
     });
 
     $("#requestInfoB").on("click", () => {
         requestInfoInterface("B.pdf");
     });
 
-    $("#requestInfoC").on("click", () => {
-        requestInfoInterface("C.pdf");
+    $("#requestInfo").on("click", () => {
+        requestInfoInterface("salon.pdf");
     });
 
     $("#requestInfo2").on("click", () => {
