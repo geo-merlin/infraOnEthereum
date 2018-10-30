@@ -108,8 +108,7 @@ const createCommand = () => {
                 `);
                 transfer(to_address, token_id).on('transactionHash', (hash) => {
                     console.log(hash);
-                })
-                .on('confirmation', (confirmationNumber, receipt) => {
+                }).on('confirmation', (confirmationNumber, receipt) => {
                     console.log(confirmationNumber, receipt);
                 }).on("receipt", (result) => {
                     console.log(result);
@@ -401,6 +400,7 @@ function requestInfo(owner, file_name) {
         } else {
             output(`
                 <p>権限を確認できませんでした。</p>
+                <p>署名が合っていない可能性があります。</p>
                 <p>トークンを持っていないと、レポートを見ることはできません。</p>
             `);
         }
