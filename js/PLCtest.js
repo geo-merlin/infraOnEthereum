@@ -106,7 +106,12 @@ const createCommand = () => {
                     トランザクションを承認しているか確認してください。</p>
                     <p>また、トランザクションが取り込まれるまでに時間がかかっている可能性があります。</p>
                 `);
-                transfer(to_address, token_id).on("receipt", (result) => {
+                transfer(to_address, token_id).on('transactionHash', (hash) => {
+                    console.log(hash);
+                })
+                .on('confirmation', (confirmationNumber, receipt) => {
+                    console.log(confirmationNumber, receipt);
+                }).on("receipt", (result) => {
                     console.log(result);
                     output(`トークンを ${to_address} に送金しました。`);
                 }).on("error", (error) => {
