@@ -206,26 +206,27 @@ $(() => {
     }
 
     window.contract = new web3js.eth.Contract(contractABI, contractAddress);
+    createCommand();
 
-    web3js.eth.getAccounts((error, accounts) => {
-        if (error) {
-            output(`
-                <p>アカウントの取得時にエラーが生じました。</p>
-                <p color="red">${error}</p>
-            `);
-            return;
-        }
-        console.log(accounts);
-        if (accounts.length === 0) {
-            output(`
-                <p>アカウントが指定されていません。</p>
-                <p>MetaMaskを起動していますか？</p>
-            `);
-            return;
-        }
-        window.user_account = accounts[0];
-        createCommand();
-    });
+    setInterval(() => {
+        web3js.eth.getAccounts((error, accounts) => {
+            if (error) {
+                output(`
+                    <p>アカウントの取得時にエラーが生じました。</p>
+                    <p color="red">${error}</p>
+                `);
+                return;
+            }
+            if (accounts.length === 0) {
+                output(`
+                    <p>アカウントが指定されていません。</p>
+                    <p>MetaMaskを起動していますか？</p>
+                `);
+                return;
+            }
+            window.user_account = accounts[0];
+        });
+    }, 500);
 });
 
 const getTotalSupply = () => {
